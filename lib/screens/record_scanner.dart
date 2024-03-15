@@ -5,14 +5,14 @@ import 'package:gallery_picker/gallery_picker.dart';
 import 'package:gallery_picker/models/media_file.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class RecordScanner extends StatefulWidget {
+  const RecordScanner({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<RecordScanner> createState() => _RecordScannerState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _RecordScannerState extends State<RecordScanner> {
   File? selectedMedia;
 
   @override
