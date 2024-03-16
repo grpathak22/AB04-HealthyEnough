@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:healthy_enough/navbar/dashboard.dart';
+import 'package:healthy_enough/screens/doctor/kyc_doctor.dart';
+import 'package:healthy_enough/screens/doctor/kyc_user.dart';
 import 'package:healthy_enough/screens/home_screen.dart';
 import 'package:healthy_enough/screens/mode_select.dart';
 
@@ -109,7 +111,16 @@ class _LoginPageState extends State<LoginPage> {
             height: mq.height * 0.07,
             child: ElevatedButton.icon(
                 onPressed: () {
-                  _handleGoogleBtnClick();
+                  // _handleGoogleBtnClick();
+                  //use following code to bypass security
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ModeSelection(onDoctorSelected: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => DoctorKYC()));
+                          }, onPatientSelected: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => UserKyc()));
+                          })));
                 },
                 style: ElevatedButton.styleFrom(
                   shape: StadiumBorder(),

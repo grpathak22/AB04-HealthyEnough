@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
 }
 
 _initializeFirebase() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

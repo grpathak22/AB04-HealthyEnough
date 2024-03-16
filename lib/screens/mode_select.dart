@@ -29,7 +29,7 @@ class ModeSelection extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            const RegistrationPage()), // Navigate to DoctorKYCPage
+                            const DoctorKYC()), // Navigate to DoctorKYCPage
                   );
                 },
                 child: Container(
