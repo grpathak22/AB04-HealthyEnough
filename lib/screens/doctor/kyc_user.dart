@@ -133,6 +133,17 @@ class _RegistrationPageState extends State<UserKyc> {
               // Add validation logic
             },
             onSaved: (newValue) => _weight),
+        TextFormField(
+          decoration: const InputDecoration(
+            labelText: 'Blood Group',
+            hintText: 'Enter your Blood Group',
+            border: OutlineInputBorder(),
+          ),
+          validator: (value) {
+            // Add validation logic
+          },
+          onSaved: (newValue) => _height = newValue!,
+        ),
       ],
     );
   }

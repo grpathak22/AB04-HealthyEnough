@@ -90,15 +90,10 @@ class _LoginPageState extends State<LoginPage> {
     mq = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 255, 250, 110),
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 255, 250, 110),
         automaticallyImplyLeading: false,
-        title: const Text('Welcome to HealthyEnough',
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: 'abz',
-              fontWeight: FontWeight.w900,
-              color: Color.fromARGB(255, 0, 0, 0),
-            )),
       ),
       body: Stack(children: [
         AnimatedPositioned(
@@ -106,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
             right: _isAnimate ? mq.width * 0.18 : mq.width * .2,
             width: mq.width * 0.6,
             duration: const Duration(milliseconds: 600),
-            child: Image.asset('assets/images/logo-color.png')),
+            child: Image.asset('assets/images/logo-no-background.png')),
         Positioned(
             bottom: mq.height * 0.15,
             left: mq.width * 0.05,
