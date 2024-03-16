@@ -94,10 +94,7 @@ class _LoginPageState extends State<LoginPage> {
             height: mq.height * 0.07,
             child: ElevatedButton.icon(
                 onPressed: () {
-                  // _handleGoogleBtnClick();
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => DashboardPage(),
-                  ));
+                  _handleGoogleBtnClick();
                 },
                 style: ElevatedButton.styleFrom(
                   shape: StadiumBorder(),
