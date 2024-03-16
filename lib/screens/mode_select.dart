@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:healthy_enough/screens/doctor/kyc_doctor.dart';
+import 'package:healthy_enough/screens/doctor/kyc_user.dart';
 
 class ModeSelection extends StatelessWidget {
   final Function onDoctorSelected;
@@ -21,7 +23,15 @@ class ModeSelection extends StatelessWidget {
           children: [
             Expanded(
               child: InkWell(
-                onTap: () => onDoctorSelected(),
+                onTap: () {
+                  onDoctorSelected();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const RegistrationPage()), // Navigate to DoctorKYCPage
+                  );
+                },
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -46,7 +56,15 @@ class ModeSelection extends StatelessWidget {
             const VerticalDivider(thickness: 1),
             Expanded(
               child: InkWell(
-                onTap: () => onPatientSelected(),
+                onTap: () {
+                  onPatientSelected();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const UserKyc()), // Navigate to DoctorKYCPage
+                  );
+                },
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(

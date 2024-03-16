@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:healthy_enough/navbar/dashboard.dart';
 import 'package:healthy_enough/screens/mode_select.dart';
-import 'package:healthy_enough/screens/record_scanner.dart';
 
 import '../api/apis.dart';
 import '../helper/dialogs.dart';
