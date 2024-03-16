@@ -1,116 +1,90 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // for date formatting
+import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 class CalendarPage extends StatefulWidget {
-  const CalendarPage({super.key});
-
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  DateTime? _selectedDate;
-  List<TimeOfDay> _availableTimeSlots = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // Simulate loading available time slots (replace with actual logic)
-    Future.delayed(Duration(seconds: 1), () {
-      setState(() {
-        _availableTimeSlots = [
-          TimeOfDay(hour: 9, minute: 0),
-          TimeOfDay(hour: 10, minute: 30),
-          TimeOfDay(hour: 14, minute: 0),
-        ];
-      });
-    });
-  }
-
-  FutureOr<void> _handleDateSelection(DateTime? selectedDate) async {
-    setState(() {
-      _selectedDate = selectedDate;
-      // Clear previous time slots and simulate loading new ones based on date (replace with actual logic)
-      _availableTimeSlots.clear();
-      Future.delayed(Duration(seconds: 1), () {
-        setState(() {
-          _availableTimeSlots = [
-            TimeOfDay(hour: 9, minute: 0),
-            TimeOfDay(hour: 10, minute: 30),
-            TimeOfDay(hour: 14, minute: 0),
-          ];
-        });
-      });
-    });
-  }
-
-  void _handleTimeSlotSelection(TimeOfDay selectedTime) {
-    // Implement logic to confirm appointment or navigate to next step
-    print('Appointment booked for: ${DateFormat('yMd').format(_selectedDate!)} at ${selectedTime.format(context)}');
-  }
+  DateTime _selectedDay = DateTime.now();
+  List<Appointment> _appointments = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Book Appointment'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Select Date',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            OutlinedButton(
-              onPressed: () => showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime.now().subtract(Duration(days: 30)),
-                lastDate: DateTime.now().add(Duration(days: 30)),
-              ).then((selectedDate) => Future.sync(() => _handleDateSelection(selectedDate))),
-              child: Text(
-                _selectedDate != null ? DateFormat('MMMM dd, yyyy').format(_selectedDate!) : 'Choose Date',
-              ),
-            ),
-            SizedBox(height: 20),
-            // Add a conditional check to display available time slots only if a date is selected
-            if (_selectedDate != null)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Available Time Slots',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
-                  Wrap(
-                    spacing: 8.0,
-                    runSpacing: 8.0,
-                    children: _availableTimeSlots.map((timeSlot) => _buildTimeSlotChip(timeSlot)).toList(),
-                  ),
-                ],
-              ),
-          ],
+        title: Text('Appointment Calendar'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left),
+          onPressed: () => setState(() => _selectedDay = _selectedDay
+              .subtract(Duration(days: 30))), // Adjust for previous month
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.chevron_right),
+            onPressed: () => setState(() => _selectedDay =
+                _selectedDay.add(Duration(days: 30))), // Adjust for next month
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          TableCalendar(
+            onDaySelected: (selectedDay, focusedDay) {
+              setState(() {
+                _selectedDay = selectedDay;
+              });
+            },
+            focusedDay: _selectedDay,
+            firstDay: DateTime(DateTime.now().year - 1),
+            lastDay: DateTime(DateTime.now().year + 1),
+            eventLoader: _getSelectedDayAppointments,
+          ),
+          Expanded(
+            child: _buildTimeline(_selectedDay),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildTimeSlotChip(TimeOfDay timeSlot) {
-    return ChoiceChip(
-      label: Text(timeSlot.format(context)),
-      selected: _selectedDate != null && _availableTimeSlots.contains(timeSlot),
-      onSelected: (isSelected) {
-        if (isSelected) {
-          _handleTimeSlotSelection(timeSlot);
-        }
+  List<dynamic> _getSelectedDayAppointments(DateTime _selectDay) {
+    return _appointments
+        .where((appointment) => appointment.date.day == _selectedDay.day)
+        .map((appointment) => appointment.date)
+        .toList();
+  }
+
+  Widget _buildTimeline(DateTime day) {
+    final appointments = _appointments
+        .where((appointment) => appointment.date.day == day.day)
+        .toList();
+    return ListView.builder(
+      itemCount: appointments.length,
+      itemBuilder: (context, index) {
+        return TimelineTile(
+          axis: TimelineAxis.vertical,
+          alignment: TimelineAlign.start,
+          startChild: Container(),
+          endChild: Text(appointments[index].summary),
+          // indicator: DotIndicator(
+          //   color: Colors.blue,
+          // ),
+          isFirst: index == 0,
+          isLast: index == appointments.length - 1,
+        );
       },
     );
   }
+}
+
+class Appointment {
+  final DateTime date;
+  final String summary;
+
+  Appointment(this.date, this.summary);
 }

@@ -13,10 +13,10 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   int _page = 0;
-  final pages = const [
-    HomePage(),
+  final pages = [
+    const HomePage(),
     CalendarPage(),
-    RecordScanner(),
+    const RecordScanner(),
   ];
 
   @override
