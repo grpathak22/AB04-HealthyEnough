@@ -15,9 +15,6 @@ class ModeSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Welcome'),
-      ),
       body: Center(
         child: Row(
           children: [
@@ -25,18 +22,13 @@ class ModeSelection extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   onDoctorSelected();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const DoctorKYC()), // Navigate to DoctorKYCPage
-                  );
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.red[200],
-                    borderRadius: const BorderRadius.only(
+                  padding: const EdgeInsets.all(15),
+                  margin: const EdgeInsets.all(10),
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomLeft: Radius.circular(20),
                     ),
@@ -45,31 +37,33 @@ class ModeSelection extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.local_hospital_outlined,
-                          size: 50, color: Colors.red),
+                          size: 50, color: Colors.white),
                       SizedBox(height: 10),
-                      Text('Doctor Login'),
+                      Text('Doctor Login',
+                          style: TextStyle(
+                            fontFamily: 'abz',
+                            fontSize: 22,
+                          )),
                     ],
                   ),
                 ),
               ),
             ),
-            const VerticalDivider(thickness: 1),
+            const VerticalDivider(
+              thickness: 10,
+              color: Colors.black,
+            ),
             Expanded(
               child: InkWell(
                 onTap: () {
                   onPatientSelected();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const UserKyc()), // Navigate to DoctorKYCPage
-                  );
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.amber[200],
-                    borderRadius: const BorderRadius.only(
+                  padding: const EdgeInsets.all(15),
+                  margin: const EdgeInsets.all(10),
+                  decoration: const BoxDecoration(
+                    color: Colors.amber,
+                    borderRadius: BorderRadius.only(
                       topRight: Radius.circular(20),
                       bottomRight: Radius.circular(20),
                     ),
@@ -78,9 +72,15 @@ class ModeSelection extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.personal_injury_outlined,
-                          size: 50, color: Colors.amber),
+                          size: 50, color: Colors.white),
                       SizedBox(height: 10),
-                      Text('Patient Login'),
+                      Text(
+                        'Patient Login',
+                        style: TextStyle(
+                          fontFamily: 'abz',
+                          fontSize: 20,
+                        ),
+                      ),
                     ],
                   ),
                 ),
