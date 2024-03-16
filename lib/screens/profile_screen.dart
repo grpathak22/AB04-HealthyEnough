@@ -1,9 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:healthy_enough/screens/login.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import '../api/apis.dart'; // Import GoogleSignIn
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -26,6 +30,12 @@ class _ProfilePageState extends State<ProfilePage> {
         profileImage = FileImage(File(pickedFile.path));
       });
     }
+  }
+
+  Future<void> _logout() async {
+    await APIs.auth.signOut();
+    await GoogleSignIn().signOut();
+    await Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 
   @override
@@ -101,6 +111,16 @@ class _ProfilePageState extends State<ProfilePage> {
                   disabledForegroundColor: Colors.white,
                 ),
                 child: const Text('Save Profile'),
+              ),
+
+              // Logout button
+              ElevatedButton(
+                onPressed: _logout,
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.red,
+                  disabledForegroundColor: Colors.white,
+                ),
+                child: const Text('Logout'),
               ),
             ],
           ),

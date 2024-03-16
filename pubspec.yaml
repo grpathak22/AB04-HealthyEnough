@@ -35,11 +35,9 @@ dependencies:
   intl: ^0.18.1  
   table_calendar: ^3.0.9
   timeline_tile: ^2.0.0
-<<<<<<< HEAD
   google_sign_in: ^6.2.1
-=======
   google_generative_ai: ^0.2.2
->>>>>>> 663d63ba3e46394265003b14093e4102046e9ab1
+  cloud_firestore: ^4.15.9
 
 dev_dependencies:
   flutter_test:
