@@ -37,6 +37,7 @@ dependencies:
   timeline_tile: ^2.0.0
   google_sign_in: ^6.2.1
   google_generative_ai: ^0.2.2
+  cloud_firestore: ^4.15.9
 
 dev_dependencies:
   flutter_test:

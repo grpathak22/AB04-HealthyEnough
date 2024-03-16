@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_enough/navbar/dashboard.dart';
+import 'package:healthy_enough/screens/home_screen.dart';
 import 'package:healthy_enough/screens/login.dart';
 
 void main() {
@@ -42,8 +45,13 @@ class _SplashScreenState extends State<SplashScreen>
     ).animate(_controller);
     _controller.forward();
     Timer(Duration(seconds: 5), () {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+      if (FirebaseAuth.instance.currentUser != null) {
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (_) => DashboardPage()));
+      } else {
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+      }
     });
   }
 

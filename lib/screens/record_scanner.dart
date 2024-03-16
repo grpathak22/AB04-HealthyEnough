@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gallery_picker/gallery_picker.dart';
-import 'package:gallery_picker/models/media_file.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:healthy_enough/artificial_intelligence/analyzer.dart';
 
 class RecordScanner extends StatefulWidget {
   const RecordScanner({super.key});
@@ -14,6 +14,7 @@ class RecordScanner extends StatefulWidget {
 
 class _RecordScannerState extends State<RecordScanner> {
   File? selectedMedia;
+  bool _imageSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +51,20 @@ class _RecordScannerState extends State<RecordScanner> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _imageView(),
+            Visibility(
+                visible: _imageSelected,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    String result = await _extractTextAndReturn(selectedMedia!);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AnalyzerPage(extractedText: result),
+                        ));
+                  },
+                  child: Text("Analyze"),
+                ))
           ],
         ),
       ),
@@ -62,6 +77,7 @@ class _RecordScannerState extends State<RecordScanner> {
         child: Text("Add image of your records to be scanned"),
       );
     }
+    _imageSelected = true;
     return Center(
       child: Image.file(
         selectedMedia!,
@@ -89,15 +105,28 @@ class _RecordScannerState extends State<RecordScanner> {
   //   );
   // }
 
-  Future<String?> _extractText(File file) async {
-    final textRecognizer = TextRecognizer(
-      script: TextRecognitionScript.latin,
-    );
+  // Future<String?> _extractText(File file) async {
+  //   final textRecognizer = TextRecognizer(
+  //     script: TextRecognitionScript.latin,
+  //   );
+  //   final InputImage inputImage = InputImage.fromFile(file);
+  //   final RecognizedText recognizedText =
+  //       await textRecognizer.processImage(inputImage);
+  //   String text = recognizedText.text;
+  //   textRecognizer.close();
+  //   return text;
+  // }
+
+  Future<String> _extractTextAndReturn(File file) async {
+    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
     final InputImage inputImage = InputImage.fromFile(file);
-    final RecognizedText recognizedText =
-        await textRecognizer.processImage(inputImage);
-    String text = recognizedText.text;
-    textRecognizer.close();
-    return text;
+    try {
+      final RecognizedText recognizedText =
+          await textRecognizer.processImage(inputImage);
+      String text = recognizedText.text;
+      return text;
+    } finally {
+      textRecognizer.close();
+    }
   }
 }
