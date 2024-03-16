@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/navbar/dashboard.dart';
+import 'package:healthy_enough/screens/mode_select.dart';
 import 'package:healthy_enough/screens/record_scanner.dart';
 
 late Size mq;
@@ -57,14 +58,21 @@ class LoginPage extends StatelessWidget {
                 onPressed: () {
                   //_handleGoogleBtnClick();
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: ((context) => DashboardPage())));
+                      builder: ((context) => ModeSelection(
+                            onDoctorSelected: () {
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => DashboardPage()));
+                            },
+                            onPatientSelected: () {},
+                          ))));
                 },
                 style: ElevatedButton.styleFrom(
                   shape: StadiumBorder(),
                   elevation: 8,
                 ),
                 icon: Transform.scale(
-                  scale: 0.6, // Adjust the scale factor to change the icon size
+                  scale: 0.6,
                   child: Image.asset('assets/images/google.png'),
                 ),
                 label: RichText(

@@ -41,8 +41,7 @@ class _SplashScreenState extends State<SplashScreen>
       end: 1,
     ).animate(_controller);
     _controller.forward();
-    Timer(Duration(seconds: 11), () {
-      // Navigate to the next screen when animation ends
+    Timer(Duration(seconds: 5), () {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
     });

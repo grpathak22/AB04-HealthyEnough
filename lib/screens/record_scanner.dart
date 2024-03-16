@@ -18,14 +18,9 @@ class _RecordScannerState extends State<RecordScanner> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          "Text Recognition",
-        ),
-      ),
       body: _buildUI(),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.amber,
         onPressed: () async {
           List<MediaFile>? media = await GalleryPicker.pickMedia(
               context: context, singleMedia: true);
@@ -40,25 +35,31 @@ class _RecordScannerState extends State<RecordScanner> {
           Icons.add,
         ),
       ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterFloat,
     );
   }
 
   Widget _buildUI() {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        _imageView(),
-        _extractTextView(),
-      ],
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 30),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _imageView(),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _imageView() {
     if (selectedMedia == null) {
       return const Center(
-        child: Text("Pick an image for text recognition."),
+        child: Text("Add image of your records to be scanned"),
       );
     }
     return Center(
@@ -69,24 +70,24 @@ class _RecordScannerState extends State<RecordScanner> {
     );
   }
 
-  Widget _extractTextView() {
-    if (selectedMedia == null) {
-      return const Center(
-        child: Text("No result."),
-      );
-    }
-    return FutureBuilder(
-      future: _extractText(selectedMedia!),
-      builder: (context, snapshot) {
-        return Text(
-          snapshot.data ?? "",
-          style: const TextStyle(
-            fontSize: 25,
-          ),
-        );
-      },
-    );
-  }
+  // Widget _extractTextView() {
+  //   if (selectedMedia == null) {
+  //     return const Center(
+  //       child: Text("No result."),
+  //     );
+  //   }
+  //   return FutureBuilder(
+  //     future: _extractText(selectedMedia!),
+  //     builder: (context, snapshot) {
+  //       return Text(
+  //         snapshot.data ?? "",
+  //         style: const TextStyle(
+  //           fontSize: 25,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   Future<String?> _extractText(File file) async {
     final textRecognizer = TextRecognizer(
