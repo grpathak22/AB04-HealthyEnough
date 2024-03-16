@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
-
 class PatientAppointment {
   final String name;
   final int age;
@@ -31,7 +29,7 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
       name: 'John Doe',
       age: 35,
       date: DateTime(2024, 03, 18),
-      time: TimeOfDay(hour: 10, minute: 30),
+      time: const TimeOfDay(hour: 10, minute: 30),
     ),
     // Add more sample appointments here
   ];
@@ -40,14 +38,14 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('HealthyEnough - Doctor'),
+        title: const Text('HealthyEnough - Doctor'),
         leading: IconButton(
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
           onPressed: () => setState(() => _showSidebar = !_showSidebar),
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.calendar_today),
+            icon: const Icon(Icons.calendar_today),
             onPressed: () => setState(() => _showCalendar = !_showCalendar),
           ),
         ],
@@ -57,7 +55,8 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
         children: [
           _buildAppointmentsList(),
           if (_showSidebar) _buildSidebarOverlay(),
-          if (_showCalendar) _buildCalendarOverlay(), // Placeholder for future calendar implementation
+          if (_showCalendar)
+            _buildCalendarOverlay(), // Placeholder for future calendar implementation
         ],
       ),
     );
@@ -67,25 +66,25 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
     return Drawer(
       child: ListView(
         children: [
-          DrawerHeader(
+          const DrawerHeader(
             child: Text(
               'HealthyEnough Doctor',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
           ListTile(
-            title: Text('Appointments'),
-            leading: Icon(Icons.calendar_today),
+            title: const Text('Appointments'),
+            leading: const Icon(Icons.calendar_today),
             onTap: () => Navigator.pop(context), // Close sidebar on tap
           ),
           ListTile(
-            title: Text('Availability'),
-            leading: Icon(Icons.access_time),
+            title: const Text('Availability'),
+            leading: const Icon(Icons.access_time),
             onTap: () => Navigator.pop(context), // Close sidebar on tap
           ),
           ListTile(
-            title: Text('User Profile'),
-            leading: Icon(Icons.person),
+            title: const Text('User Profile'),
+            leading: const Icon(Icons.person),
             onTap: () => Navigator.pop(context), // Close sidebar on tap
           ),
         ],
@@ -107,7 +106,7 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
     // You can use a package like table_calendar or build a custom one
     return Container(
       color: Colors.black.withOpacity(0.3),
-      child: Center(
+      child: const Center(
         child: Text(
           'Calendar Overlay (implementation pending)',
           style: TextStyle(fontSize: 16.0),
@@ -122,32 +121,38 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
       itemBuilder: (context, index) {
         final appointment = _appointments[index];
         return Container(
-          margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             color: Colors.white,
-            boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 2.0)], // Subtle shadow
+            boxShadow: [
+              BoxShadow(color: Colors.grey.shade200, blurRadius: 2.0)
+            ], // Subtle shadow
           ),
           child: Row(
             children: [
               // Patient info and appointment details
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CircleAvatar(
-                        backgroundColor: Colors.blue.shade200, // Placeholder avatar (replace with image provider if desired)
+                        backgroundColor: Colors.blue
+                            .shade200, // Placeholder avatar (replace with image provider if desired)
                         child: Text(
-                          appointment.name[0].toUpperCase(), // Initials in avatar
-                          style: TextStyle(color: Colors.white, fontSize: 16.0),
+                          appointment.name[0]
+                              .toUpperCase(), // Initials in avatar
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 16.0),
                         ),
                       ),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       Text(
                         appointment.name,
-                        style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 16.0, fontWeight: FontWeight.bold),
                       ),
                       Text('Age: ${appointment.age}'),
                       Text(
@@ -163,7 +168,7 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
                 children: [
                   ElevatedButton(
                     onPressed: () => handleApproveAppointment(appointment),
-                    child: Text('Approve'),
+                    child: const Text('Approve'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
@@ -171,12 +176,12 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   ElevatedButton(
                     onPressed: () => handleRejectAppointment(appointment),
-                    child: Text('Reject'),
+                    child: const Text('Reject'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor : Colors.red,
+                      backgroundColor: Colors.red,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -192,16 +197,10 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
   }
 
   void handleApproveAppointment(PatientAppointment appointment) {
-    // Implement logic to approve appointment (e.g., update database, notify patient)
-    print('Appointment approved for ${appointment.name}');
-
-    // Optionally, update UI to reflect approval (e.g., change button or display message)
+    // TODO: Implement logic to approve appointment (e.g., update database, notify patient)
   }
 
   void handleRejectAppointment(PatientAppointment appointment) {
-    // Implement logic to reject appointment (e.g., update database, notify patient)
-    print('Appointment rejected for ${appointment.name}');
-
-    // Optionally, update UI to reflect rejection (e.g., change button or display message)
+    //TODO: Implement logic to reject appointment (e.g., update database, notify patient)
   }
 }

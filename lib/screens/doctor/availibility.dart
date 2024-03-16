@@ -6,7 +6,8 @@ class DoctorAvailabilityPage extends StatefulWidget {
 }
 
 class _DoctorAvailabilityPageState extends State<DoctorAvailabilityPage> {
-  final List<bool> _availableDays = List.filled(7, false); // Initially all days unavailable
+  final List<bool> _availableDays =
+      List.filled(7, false); // Initially all days unavailable
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
 
@@ -41,24 +42,23 @@ class _DoctorAvailabilityPageState extends State<DoctorAvailabilityPage> {
   }
 
   void _saveAvailability() async {
-    // Implement your logic to save availability (e.g., database, API)
-    if (_availableDays.any((day) => day) && _startTime != null && _endTime != null) {
-      // Show success message or perform actual data saving
-      print('Availability saved successfully!');
+    if (_availableDays.any((day) => day) &&
+        _startTime != null &&
+        _endTime != null) {
+      // TODO: Show success message or perform actual data saving
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Availability saved successfully!'),
           backgroundColor: Colors.green,
         ),
       );
 
-      // Replace with your actual data saving logic (e.g., API call, database write)
-      // You might need additional information like doctor ID, etc. for data storage
+      // TODO: Replace with your actual data saving logic (e.g., API call, database write)
     } else {
-      // Show error message if required fields are missing
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please select at least one day and both start and end times.'),
+        const SnackBar(
+          content: Text(
+              'Please select at least one day and both start and end times.'),
           backgroundColor: Colors.red,
         ),
       );
@@ -69,32 +69,32 @@ class _DoctorAvailabilityPageState extends State<DoctorAvailabilityPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Set Availability'),
+        title: const Text('Set Availability'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Available Days:',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Mon'),
+                const Text('Mon'),
                 Checkbox(
                   value: _availableDays[0],
                   onChanged: (value) => _toggleDayAvailability(0),
                 ),
-                Text('Tue'),
+                const Text('Tue'),
                 Checkbox(
                   value: _availableDays[1],
                   onChanged: (value) => _toggleDayAvailability(1),
                 ),
-                Text('Wed'),
+                const Text('Wed'),
                 Checkbox(
                   value: _availableDays[2],
                   onChanged: (value) => _toggleDayAvailability(2),
@@ -104,17 +104,17 @@ class _DoctorAvailabilityPageState extends State<DoctorAvailabilityPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Thu'),
+                const Text('Thu'),
                 Checkbox(
                   value: _availableDays[3],
                   onChanged: (value) => _toggleDayAvailability(3),
                 ),
-                Text('Fri'),
+                const Text('Fri'),
                 Checkbox(
                   value: _availableDays[4],
                   onChanged: (value) => _toggleDayAvailability(4),
                 ),
-                Text('Sat'),
+                const Text('Sat'),
                 Checkbox(
                   value: _availableDays[5],
                   onChanged: (value) => _toggleDayAvailability(5),
@@ -124,44 +124,44 @@ class _DoctorAvailabilityPageState extends State<DoctorAvailabilityPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Sun'),
+                const Text('Sun'),
                 Checkbox(
                   value: _availableDays[6],
                   onChanged: (value) => _toggleDayAvailability(6),
                 ),
               ],
             ),
-            SizedBox(height: 16.0),
- Text(
+            const SizedBox(height: 16.0),
+            const Text(
               'Time Slot:',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Start Time:'),
+                const Text('Start Time:'),
                 ElevatedButton(
                   onPressed: () => _selectStartTime(context),
                   child: Text(_startTime?.format(context) ?? 'Select Start'),
                 ),
               ],
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('End Time:'),
+                const Text('End Time:'),
                 ElevatedButton(
                   onPressed: () => _selectEndTime(context),
                   child: Text(_endTime?.format(context) ?? 'Select End'),
                 ),
               ],
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _saveAvailability,
-              child: Text('Save Availability'),
+              child: const Text('Save Availability'),
             ),
           ],
         ),
