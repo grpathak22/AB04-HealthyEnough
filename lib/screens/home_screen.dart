@@ -70,15 +70,6 @@ class HomePage extends StatelessWidget {
                     text: "Popular",
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => AnalyzerPage()));
-                  },
-                  child: const HomeCard(
-                    text: "Popular",
-                  ),
-                ),
               ],
             ),
           )
