@@ -45,6 +45,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - android/app/src/main/res/mipmap/icon.png
     - assets/images/
     - assets/fonts/
   #   - images/a_dot_ham.jpeg
@@ -60,12 +61,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: abz
+      fonts:
+        - asset: assets/fonts/abz.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
