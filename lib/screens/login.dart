@@ -125,11 +125,15 @@ class _LoginPageState extends State<LoginPage> {
                           })));
                 },
                 style: ElevatedButton.styleFrom(
+                  side: const BorderSide(
+                    width: 2,
+                  ),
                   shape: StadiumBorder(),
-                  elevation: 8,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
                 ),
                 icon: Transform.scale(
-                  scale: 0.6,
+                  scale: 0.5,
                   child: Image.asset('assets/images/google.png'),
                 ),
                 label: RichText(

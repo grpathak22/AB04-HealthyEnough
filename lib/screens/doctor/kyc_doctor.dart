@@ -1,23 +1,24 @@
+import 'dart:math';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/navbar/dashboard.dart';
 import 'package:healthy_enough/screens/home_screendoc.dart';
+import 'package:healthy_enough/screens/home_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_enough/navbar/dashboarddoc.dart';
 
 class DoctorKYC extends StatefulWidget {
-  const DoctorKYC({super.key});
+  const DoctorKYC({Key? key}) : super(key: key);
 
   @override
   State<DoctorKYC> createState() => _DoctorKYCState();
 }
 
 class _DoctorKYCState extends State<DoctorKYC> {
-  final GlobalKey<FormState> _formKey =
-      GlobalKey<FormState>(); // For validation
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  // Page state variables
   int currentPage = 1;
   String _name = "";
   String _address = "";
@@ -26,7 +27,6 @@ class _DoctorKYCState extends State<DoctorKYC> {
   String _qualifications = "";
   String _specialization = "";
   String _hospitalIDPath = "";
-  // Add variable to store hospital ID data (e.g., file path)
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +42,8 @@ class _DoctorKYCState extends State<DoctorKYC> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Progress bar (replace with actual progress indicator)
                 LinearProgressIndicator(
-                  value: currentPage / 3, // Adjust based on number of pages
+                  value: currentPage / 3,
                 ),
                 const SizedBox(height: 20.0),
                 buildPageContent(currentPage),
@@ -135,17 +134,16 @@ class _DoctorKYCState extends State<DoctorKYC> {
         ),
         const SizedBox(height: 20.0),
         TextFormField(
-            decoration: const InputDecoration(
-              labelText: 'Specialization',
-              hintText: 'Enter your specialization',
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
-              return null;
-
-              // Add validation logic
-            },
-            onSaved: (newValue) => _specialization),
+          decoration: const InputDecoration(
+            labelText: 'Specialization',
+            hintText: 'Enter your specialization',
+            border: OutlineInputBorder(),
+          ),
+          validator: (value) {
+            // Add validation logic
+          },
+          onSaved: (newValue) => _specialization = newValue!,
+        ),
       ],
     );
   }
@@ -160,9 +158,7 @@ class _DoctorKYCState extends State<DoctorKYC> {
         const Spacer(),
         ElevatedButton(
           onPressed: () async {
-            // **Ensure proper indentation for setState**
             setState(() async {
-              // Implement hospital ID upload logic here (e.g., image picker)
               final image =
                   await ImagePicker().pickImage(source: ImageSource.gallery);
               if (image != null) {
@@ -180,7 +176,6 @@ class _DoctorKYCState extends State<DoctorKYC> {
     return ElevatedButton(
       onPressed: () {
         if (currentPage == 3) {
-          // Handle registration logic here (validation, calling backend)
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             _register(context);
@@ -197,20 +192,25 @@ class _DoctorKYCState extends State<DoctorKYC> {
   }
 
   void _register(BuildContext context) async {
-    CollectionReference colRef =
-        FirebaseFirestore.instance.collection("doctor");
+    // Generate a random user ID
+    String userId = generateUserId();
 
-    Map<String, dynamic> docData = {
+    // Add user to 'users' collection
+    CollectionReference usersRef =
+        FirebaseFirestore.instance.collection("users");
+    await usersRef.doc(userId).set({"type": "doctor"});
+
+    // Add doctor details to 'doctors' collection
+    CollectionReference doctorsRef =
+        FirebaseFirestore.instance.collection("doctors");
+    await doctorsRef.doc(userId).set({
       "Name": _name,
       "Address": _address,
       "PhoneNumber": _phoneNumber,
       "Email": _email,
       "Qualifications": _qualifications,
       "Specialization": _specialization,
-    };
-
-    colRef.add(docData).whenComplete(() {
-      print("Added something to firebase");
+      "HospitalIDPath": _hospitalIDPath,
     });
 
     Navigator.pushReplacement(
@@ -218,9 +218,21 @@ class _DoctorKYCState extends State<DoctorKYC> {
       MaterialPageRoute(builder: (context) => DashboardPageDoc()),
     );
   }
+
+  String generateUserId() {
+    final String chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    Random rnd = Random();
+    String result = '';
+    for (var i = 0; i < 6; i++) {
+      result += chars[rnd.nextInt(chars.length)];
+    }
+    return result;
+  }
 }
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MaterialApp(
     title: 'Registration Page',
     home: DoctorKYC(),
