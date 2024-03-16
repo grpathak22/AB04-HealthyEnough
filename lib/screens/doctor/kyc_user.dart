@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:healthy_enough/navbar/dashboard.dart';
 import 'package:healthy_enough/screens/home_screen.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -6,10 +7,10 @@ class UserKyc extends StatefulWidget {
   const UserKyc({super.key});
 
   @override
-  State<UserKyc> createState() => _RegistrationPageState();
+  State<UserKyc> createState() => _UserKycState();
 }
 
-class _RegistrationPageState extends State<UserKyc> {
+class _UserKycState extends State<UserKyc> {
   final GlobalKey<FormState> _formKey =
       GlobalKey<FormState>(); // For validation
 
@@ -160,7 +161,7 @@ class _RegistrationPageState extends State<UserKyc> {
   void _register(BuildContext context) async {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(builder: (context) => DashboardPage()),
     );
   }
 }

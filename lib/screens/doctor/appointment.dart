@@ -162,9 +162,9 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
                   ),
                 ),
               ),
-              // Approval/rejection buttons
+
               Column(
-                mainAxisSize: MainAxisSize.min, // Align buttons vertically
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   ElevatedButton(
                     onPressed: () => handleApproveAppointment(appointment),

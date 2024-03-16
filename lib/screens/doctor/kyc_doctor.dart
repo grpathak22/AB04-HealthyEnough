@@ -1,15 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_enough/navbar/dashboard.dart';
 import 'package:healthy_enough/screens/home_screen.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({super.key});
+class DoctorKYC extends StatefulWidget {
+  const DoctorKYC({super.key});
 
   @override
-  State<RegistrationPage> createState() => _RegistrationPageState();
+  State<DoctorKYC> createState() => _DoctorKYCState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _DoctorKYCState extends State<DoctorKYC> {
   final GlobalKey<FormState> _formKey =
       GlobalKey<FormState>(); // For validation
 
@@ -76,9 +79,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
             hintText: 'Enter your name',
             border: OutlineInputBorder(),
           ),
-          validator: (value) {
-            // Add validation logic (e.g., check if name is not empty)
-          },
           onSaved: (newValue) => _name = newValue!,
         ),
         const SizedBox(height: 20.0),
@@ -88,9 +88,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
             hintText: 'Enter your address',
             border: OutlineInputBorder(),
           ),
-          validator: (value) {
-            // Add validation logic
-          },
           onSaved: (newValue) => _address = newValue!,
         ),
         const SizedBox(height: 20.0),
@@ -199,9 +196,25 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   void _register(BuildContext context) async {
+    CollectionReference colRef =
+        FirebaseFirestore.instance.collection("doctor");
+
+    Map<String, dynamic> docData = {
+      "Name": _name,
+      "Address": _address,
+      "PhoneNumber": _phoneNumber,
+      "Email": _email,
+      "Qualifications": _qualifications,
+      "Specialization": _specialization,
+    };
+
+    colRef.add(docData).whenComplete(() {
+      print("Added something to firebase");
+    });
+
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(builder: (context) => DashboardPage()),
     );
   }
 }
@@ -209,6 +222,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
 void main() {
   runApp(const MaterialApp(
     title: 'Registration Page',
-    home: RegistrationPage(),
+    home: DoctorKYC(),
   ));
 }
