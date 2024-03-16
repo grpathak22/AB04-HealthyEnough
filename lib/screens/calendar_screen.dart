@@ -15,22 +15,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Appointment Calendar'),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left),
-          onPressed: () => setState(() => _selectedDay = _selectedDay
-              .subtract(const Duration(days: 30))), // Adjust for previous month
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.chevron_right),
-            onPressed: () => setState(() => _selectedDay = _selectedDay
-                .add(const Duration(days: 30))), // Adjust for next month
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(title: 'Appointment Calendar'),
       body: Column(
         children: [
           TableCalendar(
@@ -87,4 +72,22 @@ class Appointment {
   final String summary;
 
   Appointment(this.date, this.summary);
+}
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+
+  const CustomAppBar({Key? key, required this.title}) : super(key: key);
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: Text(title),
+      centerTitle: true,
+      automaticallyImplyLeading: false, // Remove the back button
+    );
+  }
 }

@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/navbar/dashboard.dart';
+<<<<<<< HEAD
+=======
+>>>>>>> 83f4e822675451a3a62ef0eb9734ef40471e03ac
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -121,15 +124,27 @@ class _UserKycState extends State<UserKyc> {
         ),
         const SizedBox(height: 20.0),
         TextFormField(
+            decoration: const InputDecoration(
+              labelText: 'Weight',
+              hintText: 'Enter your weight',
+              border: OutlineInputBorder(),
+            ),
+            validator: (value) {
+              return null;
+
+              // Add validation logic
+            },
+            onSaved: (newValue) => _weight),
+        TextFormField(
           decoration: const InputDecoration(
-            labelText: 'Weight',
-            hintText: 'Enter your weight',
+            labelText: 'Blood Group',
+            hintText: 'Enter your Blood Group',
             border: OutlineInputBorder(),
           ),
           validator: (value) {
             // Add validation logic
           },
-          onSaved: (newValue) => _weight = newValue!,
+          onSaved: (newValue) => _height = newValue!,
         ),
       ],
     );

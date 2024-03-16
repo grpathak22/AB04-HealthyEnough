@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/screens/doctor/record.dart';
 import 'package:intl/intl.dart';
+import 'package:healthy_enough/screens/doctor/availibility.dart';
+import 'package:healthy_enough/screens/profile_screen.dart';
 
 class PatientAppointment {
   final int id;
@@ -43,10 +45,6 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('HealthyEnough - Doctor'),
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () => setState(() => _showSidebar = !_showSidebar),
-        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.calendar_today),
@@ -77,19 +75,25 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
             ),
           ),
           ListTile(
-            title: const Text('Appointments'),
-            leading: const Icon(Icons.calendar_today),
-            onTap: () => Navigator.pop(context), // Close sidebar on tap
-          ),
-          ListTile(
             title: const Text('Availability'),
             leading: const Icon(Icons.access_time),
-            onTap: () => Navigator.pop(context), // Close sidebar on tap
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DoctorAvailabilityPage()),
+            ), // Navigate to AvailabilityPage
+          ),
+          ListTile(
+            title: const Text('Records'),
+            leading: const Icon(Icons.calendar_today),
+            //navigate to records page // Close sidebar on tap
           ),
           ListTile(
             title: const Text('User Profile'),
             leading: const Icon(Icons.person),
-            onTap: () => Navigator.pop(context), // Close sidebar on tap
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage()),
+            ), // Navigate to UserProfilePage
           ),
         ],
       ),
