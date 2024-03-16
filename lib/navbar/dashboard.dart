@@ -2,7 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/screens/calendar_screen.dart';
 import 'package:healthy_enough/screens/home_screen.dart';
-import 'package:healthy_enough/screens/profile_screen.dart';
+import 'package:healthy_enough/screens/record_scanner.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -16,7 +16,7 @@ class _DashboardPageState extends State<DashboardPage> {
   final pages = const [
     HomePage(),
     CalendarPage(),
-    ProfilePage(),
+    RecordScanner(),
   ];
 
   @override
@@ -35,7 +35,7 @@ class _DashboardPageState extends State<DashboardPage> {
           items: const <Widget>[
             Icon(Icons.home, size: 26, color: Colors.white),
             Icon(Icons.calendar_month, size: 26, color: Colors.white),
-            Icon(Icons.verified_user_rounded, size: 26, color: Colors.white),
+            Icon(Icons.image, size: 26, color: Colors.white),
           ]),
       body: pages[_page],
     );

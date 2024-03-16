@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:healthy_enough/screens/doctor/appointment.dart';
 import 'package:healthy_enough/screens/doctor/availibility.dart';
+import 'package:healthy_enough/screens/profile_screen.dart';
 import 'package:healthy_enough/widgets/home_card.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,23 +12,29 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   "Hello Name",
                   style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
                 ),
-                CircleAvatar(
-                  radius: 25,
-                  backgroundImage: AssetImage("assets/images/google.png"),
-                )
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const ProfilePage()));
+                  },
+                  child: const CircleAvatar(
+                    radius: 25,
+                    backgroundImage: AssetImage('assets/images/person.png'),
+                  ),
+                ),
               ],
             ),
           ),
