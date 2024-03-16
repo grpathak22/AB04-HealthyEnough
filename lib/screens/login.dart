@@ -39,7 +39,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  _handleGoogleBtnClick(BuildContext context) {
+  _handleGoogleBtnClick() {
     Dialogs.showProgressBar(context);
     _signInWithGoogle().then((user) {
       // ignore: unnecessary_null_comparison
