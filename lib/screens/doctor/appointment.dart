@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:healthy_enough/screens/doctor/record.dart';
 import 'package:intl/intl.dart';
 import 'package:healthy_enough/screens/doctor/availibility.dart';
 import 'package:healthy_enough/screens/profile_screen.dart';
 
 class PatientAppointment {
+  final int id;
   final String name;
   final int age;
   final DateTime date;
   final TimeOfDay time;
 
   PatientAppointment({
+    required this.id,
     required this.name,
     required this.age,
     required this.date,
@@ -28,6 +31,7 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
 
   final List<PatientAppointment> _appointments = [
     PatientAppointment(
+      id: 1,
       name: 'John Doe',
       age: 35,
       date: DateTime(2024, 03, 18),
@@ -143,11 +147,9 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CircleAvatar(
-                        backgroundColor: Colors.blue
-                            .shade200, // Placeholder avatar (replace with image provider if desired)
+                        backgroundColor: Colors.blue.shade200,
                         child: Text(
-                          appointment.name[0]
-                              .toUpperCase(), // Initials in avatar
+                          appointment.name[0].toUpperCase(),
                           style: const TextStyle(
                               color: Colors.white, fontSize: 16.0),
                         ),
@@ -167,32 +169,17 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
                 ),
               ),
 
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => handleApproveAppointment(appointment),
-                    child: const Text('Approve'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
+              ElevatedButton(
+                onPressed: () => handlePatientInformation(appointment),
+                child: const Text('Details'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey[400],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  const SizedBox(height: 8.0),
-                  ElevatedButton(
-                    onPressed: () => handleRejectAppointment(appointment),
-                    child: const Text('Reject'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
+              const SizedBox(height: 8.0),
             ],
           ),
         );
@@ -200,11 +187,8 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
     );
   }
 
-  void handleApproveAppointment(PatientAppointment appointment) {
-    // TODO: Implement logic to approve appointment (e.g., update database, notify patient)
-  }
-
-  void handleRejectAppointment(PatientAppointment appointment) {
-    //TODO: Implement logic to reject appointment (e.g., update database, notify patient)
+  void handlePatientInformation(PatientAppointment appointment) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => MedicalRecordPage(patientId: appointment.id)));
   }
 }

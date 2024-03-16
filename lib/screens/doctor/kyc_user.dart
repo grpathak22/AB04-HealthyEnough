@@ -1,20 +1,21 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/navbar/dashboard.dart';
 import 'package:healthy_enough/screens/home_screen.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserKyc extends StatefulWidget {
-  const UserKyc({super.key});
+  const UserKyc({Key? key}) : super(key: key);
 
   @override
   State<UserKyc> createState() => _UserKycState();
 }
 
 class _UserKycState extends State<UserKyc> {
-  final GlobalKey<FormState> _formKey =
-      GlobalKey<FormState>(); // For validation
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  // Page state variables
   int currentPage = 1;
   String _name = "";
   String _age = "";
@@ -22,7 +23,6 @@ class _UserKycState extends State<UserKyc> {
   String _height = "";
   String _bloodgrp = "";
   String _address = "";
-  // Add variable to store hospital ID data (e.g., file path)
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +38,8 @@ class _UserKycState extends State<UserKyc> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Progress bar (replace with actual progress indicator)
                 LinearProgressIndicator(
-                  value: currentPage / 3, // Adjust based on number of pages
+                  value: currentPage / 2,
                 ),
                 const SizedBox(height: 20.0),
                 buildPageContent(currentPage),
@@ -75,7 +74,7 @@ class _UserKycState extends State<UserKyc> {
             border: OutlineInputBorder(),
           ),
           validator: (value) {
-            // Add validation logic (e.g., check if name is not empty)
+            // Add validation logic
           },
           onSaved: (newValue) => _name = newValue!,
         ),
@@ -153,7 +152,6 @@ class _UserKycState extends State<UserKyc> {
     return ElevatedButton(
       onPressed: () {
         if (currentPage == 2) {
-          // Handle registration logic here (validation, calling backend)
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             _register(context);
@@ -170,10 +168,39 @@ class _UserKycState extends State<UserKyc> {
   }
 
   void _register(BuildContext context) async {
+    // Generate a random user ID
+    String userId = generateUserId();
+
+    // Add user to 'users' collection
+    CollectionReference usersRef =
+        FirebaseFirestore.instance.collection("users");
+    await usersRef.doc(userId).set({"type": "user"});
+
+    // Add user details to 'patients' collection
+    CollectionReference patientsRef =
+        FirebaseFirestore.instance.collection("patients");
+    await patientsRef.doc(userId).set({
+      "Name": _name,
+      "Age": _age,
+      "Weight": _weight,
+      "Height": _height,
+      "Address": _address,
+    });
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => DashboardPage()),
     );
+  }
+
+  String generateUserId() {
+    final String chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    Random rnd = Random();
+    String result = '';
+    for (var i = 0; i < 6; i++) {
+      result += chars[rnd.nextInt(chars.length)];
+    }
+    return result;
   }
 }
 
