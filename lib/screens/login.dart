@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:healthy_enough/navbar/dashboard.dart';
 import 'package:healthy_enough/screens/mode_select.dart';
 import 'package:healthy_enough/screens/record_scanner.dart';
@@ -24,9 +26,40 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+
+Future<UserCredential> _signInWithGoogle() async {
+  // Trigger the authentication flow
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication? googleAuth =
+      await googleUser?.authentication;
+
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+
+  // Once signed in, return the UserCredential
+  return await FirebaseAuth.instance.signInWithCredential(credential);
+}
+
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
-
+  _handleGoogleBtnClick(BuildContext context) {
+  _signInWithGoogle().then((user) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: ((context) => ModeSelection(
+              onDoctorSelected: () {
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => DashboardPage()));
+              },
+              onPatientSelected: () {},
+            ))));
+  });
+ }
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
@@ -56,16 +89,7 @@ class LoginPage extends StatelessWidget {
             height: mq.height * 0.07,
             child: ElevatedButton.icon(
                 onPressed: () {
-                  //_handleGoogleBtnClick();
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: ((context) => ModeSelection(
-                            onDoctorSelected: () {
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => DashboardPage()));
-                            },
-                            onPatientSelected: () {},
-                          ))));
+                  _handleGoogleBtnClick(context);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: StadiumBorder(),
