@@ -87,10 +87,7 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             color: Color.fromARGB(255, 255, 250, 110),
-
-            boxShadow: [
-              BoxShadow(color: Colors.grey.shade200, blurRadius: 2.0)
-            ], // Subtle shadow
+            // Subtle shadow
           ),
           child: Row(
             children: [
@@ -133,34 +130,6 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-              ),
-              const SizedBox(height: 8.0),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 8.0),
-                  ElevatedButton(
-                    onPressed: () => handleApproveAppointment(appointment),
-                    child: const Text('Approve'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10.0),
-                  ElevatedButton(
-                    onPressed: () => handleRejectAppointment(appointment),
-                    child: const Text('Reject'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),

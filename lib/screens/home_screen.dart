@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
           style: TextStyle(
             fontSize: 22.0,
             fontWeight: FontWeight.bold,
-            color: const Color.fromARGB(255, 128, 81, 81),
+            color: Colors.black,
           ),
         ),
         actions: [

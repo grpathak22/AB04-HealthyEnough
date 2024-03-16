@@ -3,11 +3,9 @@ import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/navbar/dashboard.dart';
-import 'package:healthy_enough/screens/home_screendoc.dart';
 import 'package:healthy_enough/screens/home_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:healthy_enough/navbar/dashboarddoc.dart';
 
 class DoctorKYC extends StatefulWidget {
   const DoctorKYC({Key? key}) : super(key: key);
@@ -215,7 +213,7 @@ class _DoctorKYCState extends State<DoctorKYC> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => DashboardPageDoc()),
+      MaterialPageRoute(builder: (context) => DashboardPage()),
     );
   }
 
