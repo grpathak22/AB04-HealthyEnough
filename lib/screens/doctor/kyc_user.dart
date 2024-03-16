@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/navbar/dashboard.dart';
-<<<<<<< HEAD
-=======
 import 'package:healthy_enough/screens/home_screen.dart';
->>>>>>> 83f4e822675451a3a62ef0eb9734ef40471e03ac
 import 'package:image_picker/image_picker.dart';
 
 class UserKyc extends StatefulWidget {

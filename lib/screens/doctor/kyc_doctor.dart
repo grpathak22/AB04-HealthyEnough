@@ -1,12 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/navbar/dashboard.dart';
-<<<<<<< HEAD
-=======
-import 'package:healthy_enough/screens/home_screen.dart';
->>>>>>> 83f4e822675451a3a62ef0eb9734ef40471e03ac
+import 'package:healthy_enough/screens/home_screendoc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:healthy_enough/navbar/dashboarddoc.dart';
 
 class DoctorKYC extends StatefulWidget {
   const DoctorKYC({super.key});
@@ -217,7 +215,7 @@ class _DoctorKYCState extends State<DoctorKYC> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => DashboardPage()),
+      MaterialPageRoute(builder: (context) => DashboardPageDoc()),
     );
   }
 }

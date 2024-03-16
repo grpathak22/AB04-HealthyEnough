@@ -112,6 +112,8 @@ class _LoginPageState extends State<LoginPage> {
             child: ElevatedButton.icon(
                 onPressed: () {
                   // _handleGoogleBtnClick();
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => DashboardPage()));
                   //use following code to bypass security
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ModeSelection(onDoctorSelected: () {

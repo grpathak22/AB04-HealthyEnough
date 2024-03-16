@@ -48,59 +48,12 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
           ),
         ],
       ),
-      drawer: _buildSidebar(),
       body: Stack(
         children: [
           _buildAppointmentsList(),
-          if (_showSidebar) _buildSidebarOverlay(),
           if (_showCalendar)
             _buildCalendarOverlay(), // Placeholder for future calendar implementation
         ],
-      ),
-    );
-  }
-
-  Widget _buildSidebar() {
-    return Drawer(
-      child: ListView(
-        children: [
-          const DrawerHeader(
-            child: Text(
-              'HealthyEnough Doctor',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
-          ListTile(
-            title: const Text('Availability'),
-            leading: const Icon(Icons.access_time),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DoctorAvailabilityPage()),
-            ), // Navigate to AvailabilityPage
-          ),
-          ListTile(
-            title: const Text('Records'),
-            leading: const Icon(Icons.calendar_today),
-            //navigate to records page // Close sidebar on tap
-          ),
-          ListTile(
-            title: const Text('User Profile'),
-            leading: const Icon(Icons.person),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
-            ), // Navigate to UserProfilePage
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSidebarOverlay() {
-    return GestureDetector(
-      onTap: () => setState(() => _showSidebar = false),
-      child: Container(
-        color: Colors.black.withOpacity(0.3),
       ),
     );
   }
@@ -128,7 +81,8 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
           margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            color: Colors.white,
+            color: Color.fromARGB(255, 255, 250, 110),
+
             boxShadow: [
               BoxShadow(color: Colors.grey.shade200, blurRadius: 2.0)
             ], // Subtle shadow
@@ -170,6 +124,7 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  const SizedBox(height: 8.0),
                   ElevatedButton(
                     onPressed: () => handleApproveAppointment(appointment),
                     child: const Text('Approve'),
@@ -180,7 +135,7 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(width: 10.0),
                   ElevatedButton(
                     onPressed: () => handleRejectAppointment(appointment),
                     child: const Text('Reject'),
