@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:healthy_enough/artificial_intelligence/analyzer.dart';
 import 'package:healthy_enough/screens/doctor/appointment.dart';
 import 'package:healthy_enough/screens/doctor/availibility.dart';
 import 'package:healthy_enough/screens/profile_screen.dart';
@@ -64,6 +65,15 @@ class HomePage extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => DoctorAvailabilityPage()));
+                  },
+                  child: const HomeCard(
+                    text: "Popular",
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => AnalyzerPage()));
                   },
                   child: const HomeCard(
                     text: "Popular",

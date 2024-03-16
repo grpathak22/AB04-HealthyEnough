@@ -1,26 +1,44 @@
 {
   "project_info": {
-    "project_number": "328173957148",
-    "project_id": "healthyenough-9a19c",
-    "storage_bucket": "healthyenough-9a19c.appspot.com"
+    "project_number": "986682409513",
+    "project_id": "healthyenough-750b3",
+    "storage_bucket": "healthyenough-750b3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:328173957148:android:1c1da416141b323245afd9",
+        "mobilesdk_app_id": "1:986682409513:android:ab73da8b75e10d279a9238",
         "android_client_info": {
           "package_name": "com.example.healthy_enough"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "986682409513-b1jig6ss9t45t3h8j5dehtcdojfeum1f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.healthy_enough",
+            "certificate_hash": "eda1d1592132f84530a1bea9e7d26ca404156285"
+          }
+        },
+        {
+          "client_id": "986682409513-fpt4n4nj3gegh5749hqd4lugpfef6hkc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDnus4vI00JdLndK0aMAd3Q3JCwjWvj5mw"
+          "current_key": "AIzaSyD67woSwVZCNw5cVXFEtjx2VeInwnG4MdM"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "986682409513-fpt4n4nj3gegh5749hqd4lugpfef6hkc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
