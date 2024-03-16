@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/artificial_intelligence/connection.dart';
 
@@ -10,6 +13,9 @@ class AnalyzerPage extends StatefulWidget {
 }
 
 class _AnalyzerPageState extends State<AnalyzerPage> {
+  final CollectionReference patRec =
+      FirebaseFirestore.instance.collection("patient_record");
+
   String prompt = '''{
   "WBC": null,
   "RBC": null,
@@ -89,6 +95,7 @@ class _AnalyzerPageState extends State<AnalyzerPage> {
                   setState(() {
                     prompt = response.toString();
                   });
+                  updateDatabase();
                 },
                 child: const Text("Submit"),
               ),
@@ -98,5 +105,13 @@ class _AnalyzerPageState extends State<AnalyzerPage> {
         ),
       ),
     );
+  }
+
+  Future<void> updateDatabase() async {
+    final patData = json.decode(prompt);
+
+    patRec.add(patData).whenComplete(() {
+      print("data added successfully");
+    });
   }
 }
