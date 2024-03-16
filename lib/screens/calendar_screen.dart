@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:table_calendar/table_calendar.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
@@ -16,18 +16,18 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Appointment Calendar'),
+        title: const Text('Appointment Calendar'),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.chevron_left),
+          icon: const Icon(Icons.chevron_left),
           onPressed: () => setState(() => _selectedDay = _selectedDay
-              .subtract(Duration(days: 30))), // Adjust for previous month
+              .subtract(const Duration(days: 30))), // Adjust for previous month
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.chevron_right),
-            onPressed: () => setState(() => _selectedDay =
-                _selectedDay.add(Duration(days: 30))), // Adjust for next month
+            icon: const Icon(Icons.chevron_right),
+            onPressed: () => setState(() => _selectedDay = _selectedDay
+                .add(const Duration(days: 30))), // Adjust for next month
           ),
         ],
       ),

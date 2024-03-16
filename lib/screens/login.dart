@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/navbar/dashboard.dart';
 import 'package:healthy_enough/screens/mode_select.dart';
-import 'package:healthy_enough/screens/record_scanner.dart';
 
 late Size mq;
 bool _isAnimate = false;
