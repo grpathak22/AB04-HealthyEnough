@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:healthy_enough/navbar/dashboard.dart';
+import 'package:healthy_enough/screens/record_scanner.dart';
 
 late Size mq;
 bool _isAnimate = false;
@@ -31,7 +33,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Welcome to HealthyEnough',
+        title: const Text('Welcome to HealthyEnough',
             style: TextStyle(
               fontSize: 20,
               fontFamily: 'abz',
@@ -44,7 +46,7 @@ class LoginPage extends StatelessWidget {
             top: mq.height * .15,
             right: _isAnimate ? mq.width * 0.18 : mq.width * .2,
             width: mq.width * 0.6,
-            duration: Duration(milliseconds: 600),
+            duration: const Duration(milliseconds: 600),
             child: Image.asset('assets/images/logo-color.png')),
         Positioned(
             bottom: mq.height * 0.15,
@@ -54,6 +56,8 @@ class LoginPage extends StatelessWidget {
             child: ElevatedButton.icon(
                 onPressed: () {
                   //_handleGoogleBtnClick();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: ((context) => DashboardPage())));
                 },
                 style: ElevatedButton.styleFrom(
                   shape: StadiumBorder(),
@@ -64,7 +68,7 @@ class LoginPage extends StatelessWidget {
                   child: Image.asset('assets/images/google.png'),
                 ),
                 label: RichText(
-                  text: TextSpan(children: [
+                  text: const TextSpan(children: [
                     TextSpan(
                         text: 'Sign in with Google',
                         style: TextStyle(
@@ -72,7 +76,7 @@ class LoginPage extends StatelessWidget {
                             fontFamily: 'abz',
                             color: Colors.black)),
                   ]),
-                )))
+                ))),
       ]),
     );
   }
