@@ -72,7 +72,9 @@ class HomePageDoc extends StatelessWidget {
                     ));
                   },
                   child: const HomeCard(
-                    text: "Doctor Appointments", // More descriptive text
+                    color: Colors.teal,
+                    text: "Doctor Appointments",
+                    // More descriptive text
                   ),
                 ),
                 GestureDetector(
@@ -85,8 +87,9 @@ class HomePageDoc extends StatelessWidget {
                     );
                   },
                   child: const HomeCard(
-                    text: "Set Availability", // Renamed section
-                  ),
+                      color: Colors.teal, text: "Set Availability"
+                      // Renamed section
+                      ),
                 ),
               ],
             ),

@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(255, 255, 250, 110),
       appBar: AppBar(
         backgroundColor: Colors.teal,
         title: const Text(
@@ -46,7 +46,7 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Hello, Doc!',
+                  'Hello!',
                   style: TextStyle(
                     fontSize: 28.0,
                     fontWeight: FontWeight.w600,
