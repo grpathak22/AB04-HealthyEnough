@@ -42,22 +42,55 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   _handleGoogleBtnClick() {
-    Dialogs.showProgressBar(context);
-    _signInWithGoogle().then((user) {
-      // ignore: unnecessary_null_comparison
-      Navigator.pop(context);
-      if (user != null) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: ((context) => ModeSelection(
-                  onDoctorSelected: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => DashboardPage()));
-                  },
-                  onPatientSelected: () {},
-                ))));
-      }
-    });
-  }
+  Dialogs.showProgressBar(context);
+  _signInWithGoogle().then((user) {
+    Navigator.pop(context);
+    if (user != null) {
+      // Check if the user exists in Firestore and retrieve their type
+      APIs.userExists().then((exists) {
+        if (exists) {
+          // User exists, retrieve their type and redirect accordingly
+          APIs.firestore.collection('users').doc(APIs.user.uid).get().then((doc) {
+            if (doc.exists) {
+              String userType = doc['type'];
+              if (userType == 'doctor') {
+                // Redirect to doctor's page
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => DashboardPage(),
+                ));
+              } else if (userType == 'patient') {
+                // Redirect to patient's page
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => UserKyc(), // or whichever page is appropriate for patients
+                ));
+              }
+            }
+          }).catchError((error) {
+            print('Error retrieving user data: $error');
+            // Handle error
+          });
+        } else {
+          // User does not exist, redirect to ModeSelection page
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => ModeSelection(
+              onDoctorSelected: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => DoctorKYC(),
+                ));
+              },
+              onPatientSelected: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => UserKyc(),
+                ));
+              },
+            ),
+          ));
+        }
+      });
+    }
+  });
+}
+
 
   Future<UserCredential?> _signInWithGoogle() async {
     // Trigger the authentication flow
@@ -111,16 +144,16 @@ class _LoginPageState extends State<LoginPage> {
             height: mq.height * 0.07,
             child: ElevatedButton.icon(
                 onPressed: () {
-                  // _handleGoogleBtnClick();
+                  _handleGoogleBtnClick();
                   //use following code to bypass security
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ModeSelection(onDoctorSelected: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => DoctorKYC()));
-                          }, onPatientSelected: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => UserKyc()));
-                          })));
+                  // Navigator.of(context).push(MaterialPageRoute(
+                  //     builder: (context) => ModeSelection(onDoctorSelected: () {
+                  //           Navigator.of(context).push(MaterialPageRoute(
+                  //               builder: (context) => DoctorKYC()));
+                  //         }, onPatientSelected: () {
+                  //           Navigator.of(context).push(MaterialPageRoute(
+                  //               builder: (context) => UserKyc()));
+                  //         })));
                 },
                 style: ElevatedButton.styleFrom(
                   shape: StadiumBorder(),
