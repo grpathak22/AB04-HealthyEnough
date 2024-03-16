@@ -67,8 +67,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
   }
 
-  Widget buildPage1() {
-    return Column(
+ Widget buildPage1() {
+  final _formKey = GlobalKey<FormState>(); // Create a GlobalKey for the Form
+
+  String? _name;
+  String? _address;
+  String? _phoneNumber;
+  String? _email;
+
+  return Form(
+    key: _formKey, // Associate the Form with the GlobalKey
+    child: Column(
       children: [
         TextFormField(
           decoration: const InputDecoration(
@@ -77,7 +86,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
             border: OutlineInputBorder(),
           ),
           validator: (value) {
-            // Add validation logic (e.g., check if name is not empty)
+            if (value == null || value.isEmpty) {
+              return 'Please enter your name.';
+            }
+            return null; // No error if validation passes
           },
           onSaved: (newValue) => _name = newValue!,
         ),
@@ -89,7 +101,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
             border: OutlineInputBorder(),
           ),
           validator: (value) {
-            // Add validation logic
+            if (value == null || value.isEmpty) {
+              return 'Please enter your address.';
+            }
+            return null;
           },
           onSaved: (newValue) => _address = newValue!,
         ),
@@ -101,7 +116,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
             border: OutlineInputBorder(),
           ),
           validator: (value) {
-            // Add validation logic
+            if (value == null || value.isEmpty) {
+              return 'Please enter your mobile number.';
+            }
+            // You can add more specific validation for phone number format here
+            return null;
           },
           onSaved: (newValue) => _phoneNumber = newValue!,
         ),
@@ -113,16 +132,44 @@ class _RegistrationPageState extends State<RegistrationPage> {
             border: OutlineInputBorder(),
           ),
           validator: (value) {
-            // Add validation logic (e.g., check for valid email format)
+            if (value == null || value.isEmpty) {
+              return 'Please enter your email.';
+            }
+            // You can add more specific validation for email format here (e.g., using a regular expression)
+            return null;
           },
           onSaved: (newValue) => _email = newValue!,
         ),
+        ElevatedButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save(); // Call save() to retrieve form data
+              // Process the form data (e.g., print, store in variables, send to server)
+              print('Name: $_name');
+              print('Address: $_address');
+              print('Phone Number: $_phoneNumber');
+              print('Email: $_email');
+            } else {
+              // Show an error message or perform other actions if validation fails
+              print('Validation failed!');
+            }
+          },
+          child: const Text('Submit'),
+        ),
       ],
-    );
-  }
+    ),
+  );
+}
 
   Widget buildPage2() {
-    return Column(
+  final _formKey = GlobalKey<FormState>(); // Create a GlobalKey for the Form
+
+  String? _qualifications;
+  String? _specialization;
+
+  return Form(
+    key: _formKey, // Associate the Form with the GlobalKey
+    child: Column(
       children: [
         TextFormField(
           decoration: const InputDecoration(
@@ -131,26 +178,46 @@ class _RegistrationPageState extends State<RegistrationPage> {
             border: OutlineInputBorder(),
           ),
           validator: (value) {
-            // Add validation logic
+            if (value == null || value.isEmpty) {
+              return 'Please enter your qualifications.';
+            }
+            return null; // No error if validation passes
           },
           onSaved: (newValue) => _qualifications = newValue!,
         ),
         const SizedBox(height: 20.0),
         TextFormField(
-            decoration: const InputDecoration(
-              labelText: 'Specialization',
-              hintText: 'Enter your specialization',
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
-              return null;
-
-              // Add validation logic
-            },
-            onSaved: (newValue) => _specialization),
+          decoration: const InputDecoration(
+            labelText: 'Specialization',
+            hintText: 'Enter your specialization',
+            border: OutlineInputBorder(),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter your specialization.';
+            }
+            return null;
+          },
+          onSaved: (newValue) => _specialization = newValue!,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save(); // Call save() to retrieve form data
+              // Process the form data (e.g., print, store in variables, send to server)
+              print('Qualifications: $_qualifications');
+              print('Specialization: $_specialization');
+            } else {
+              // Show an error message or perform other actions if validation fails
+              print('Validation failed!');
+            }
+          },
+          child: const Text('Submit'),
+        ),
       ],
-    );
-  }
+    ),
+  );
+}
 
   Widget buildPage3() {
     return Row(

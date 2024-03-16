@@ -65,7 +65,15 @@ class _RegistrationPageState extends State<UserKyc> {
   }
 
   Widget buildPage1() {
-    return Column(
+  final _formKey = GlobalKey<FormState>(); // Create a GlobalKey for the Form
+
+  String? _name;
+  String? _address;
+  int? _age;
+
+  return Form(
+    key: _formKey, // Associate the Form with the GlobalKey
+    child: Column(
       children: [
         TextFormField(
           decoration: const InputDecoration(
@@ -74,7 +82,10 @@ class _RegistrationPageState extends State<UserKyc> {
             border: OutlineInputBorder(),
           ),
           validator: (value) {
-            // Add validation logic (e.g., check if name is not empty)
+            if (value == null || value.isEmpty) {
+              return 'Please enter your name.';
+            }
+            return null; // No error if validation passes
           },
           onSaved: (newValue) => _name = newValue!,
         ),
@@ -86,7 +97,10 @@ class _RegistrationPageState extends State<UserKyc> {
             border: OutlineInputBorder(),
           ),
           validator: (value) {
-            // Add validation logic
+            if (value == null || value.isEmpty) {
+              return 'Please enter your address.';
+            }
+            return null;
           },
           onSaved: (newValue) => _address = newValue!,
         ),
@@ -98,44 +112,82 @@ class _RegistrationPageState extends State<UserKyc> {
             border: OutlineInputBorder(),
           ),
           validator: (value) {
-            // Add validation logic
+            if (value == null || value.isEmpty) {
+              return 'Please enter your age.';
+            }
+            try {
+              int age = int.parse(value);
+              if (age <= 0) {
+                return 'Please enter a valid age.';
+              }
+            } catch (error) {
+              return 'Please enter a valid integer for age.';
+            }
+            return null;
           },
-          onSaved: (newValue) => _age = newValue!,
+          onSaved: (newValue) => _age = int.parse(newValue!),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
 
-  Widget buildPage2() {
-    return Column(
+ Widget buildPage2() {
+  final _formKey = GlobalKey<FormState>(); // Create a GlobalKey for the Form
+
+  String? _height;
+  String? _weight;
+
+  return Form(
+    key: _formKey, // Associate the Form with the GlobalKey
+    child: Column(
       children: [
         TextFormField(
           decoration: const InputDecoration(
             labelText: 'Height',
-            hintText: 'Enter your Height',
+            hintText: 'Enter your Height (e.g., 1.80 m)',
             border: OutlineInputBorder(),
           ),
           validator: (value) {
-            // Add validation logic
+            if (value == null || value.isEmpty) {
+              return 'Please enter your height.';
+            }
+            try {
+              // Check for valid format (e.g., decimal number)
+              double.parse(value);
+              return null;
+            } catch (error) {
+              return 'Please enter a valid height format (e.g., 1.80).';
+            }
           },
           onSaved: (newValue) => _height = newValue!,
         ),
         const SizedBox(height: 20.0),
         TextFormField(
-            decoration: const InputDecoration(
-              labelText: 'Weight',
-              hintText: 'Enter your weight',
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
+          decoration: const InputDecoration(
+            labelText: 'Weight',
+            hintText: 'Enter your weight (e.g., 70 kg)',
+            border: OutlineInputBorder(),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter your weight.';
+            }
+            try {
+              // Check for valid format (e.g., decimal number)
+              double.parse(value);
               return null;
-
-              // Add validation logic
-            },
-            onSaved: (newValue) => _weight),
+            } catch (error) {
+              return 'Please enter a valid weight format (e.g., 70).';
+            }
+          },
+          onSaved: (newValue) => _weight = newValue!,
+        ),
       ],
-    );
-  }
+    ),
+  );
+}
+
 
   Widget buildNextButton(BuildContext context) {
     return ElevatedButton(
