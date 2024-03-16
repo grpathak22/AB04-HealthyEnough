@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:healthy_enough/screens/home_screen.dart';
+import 'package:healthy_enough/navbar/dashboard.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -201,7 +201,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   void _register(BuildContext context) async {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(builder: (context) => DashboardPage()),
     );
   }
 }
