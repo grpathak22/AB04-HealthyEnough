@@ -12,7 +12,7 @@ class HomeCard extends StatelessWidget {
     super.key,
     required this.text,
     this.margin = const EdgeInsets.all(0),
-    this.padding = const EdgeInsets.all(24),
+    this.padding = const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
     this.borderRadius = 8,
     this.elevation = 4,
     this.color = Colors.white,
@@ -35,8 +35,9 @@ class HomeCard extends StatelessWidget {
         child: Text(
           text,
           style: const TextStyle(
-            fontSize: 14,
+            fontSize: 15,
             fontWeight: FontWeight.w300,
+            fontFamily: "abz",
           ),
         ),
       ),

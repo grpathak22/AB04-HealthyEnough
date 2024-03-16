@@ -190,15 +190,12 @@ class _DoctorKYCState extends State<DoctorKYC> {
   }
 
   void _register(BuildContext context) async {
-    // Generate a random user ID
     String userId = generateUserId();
 
-    // Add user to 'users' collection
     CollectionReference usersRef =
         FirebaseFirestore.instance.collection("users");
     await usersRef.doc(userId).set({"type": "doctor"});
 
-    // Add doctor details to 'doctors' collection
     CollectionReference doctorsRef =
         FirebaseFirestore.instance.collection("doctors");
     await doctorsRef.doc(userId).set({

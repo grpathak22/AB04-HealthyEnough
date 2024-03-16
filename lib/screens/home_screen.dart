@@ -5,24 +5,28 @@ import 'package:flutter/widgets.dart';
 import 'package:healthy_enough/artificial_intelligence/analyzer.dart'; // (Placeholder for future use)
 import 'package:healthy_enough/screens/doctor/appointment.dart';
 import 'package:healthy_enough/screens/doctor/availibility.dart';
+import 'package:healthy_enough/screens/doctor_details.dart';
 import 'package:healthy_enough/screens/profile_screen.dart';
+import 'package:healthy_enough/widgets/doc_card.dart';
 import 'package:healthy_enough/widgets/home_card.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+  final _names = ["John", "Jason", "Jonnathon", "Jacob"];
+  final _id = [1, 2, 3, 4];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.amber,
         title: const Text(
           'Healthy Enough',
           style: TextStyle(
             fontSize: 22.0,
             fontWeight: FontWeight.bold,
-            color: const Color.fromARGB(255, 128, 81, 81),
+            color: Colors.white,
           ),
         ),
         actions: [
@@ -38,7 +42,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(15.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -50,15 +54,12 @@ class HomePage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 28.0,
                     fontWeight: FontWeight.w600,
-                    color: Colors.teal,
+                    color: Colors.amber,
                   ),
                 ),
-                // Removed the entire GestureDetector wrapper
               ],
             ),
             const SizedBox(height: 20.0),
-
-            // Search field with magnifying glass icon
             Row(
               children: [
                 const SizedBox(width: 10.0), // Add some left padding
@@ -86,7 +87,8 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 20.0),
 
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
                   onTap: () {
@@ -95,7 +97,8 @@ class HomePage extends StatelessWidget {
                     ));
                   },
                   child: const HomeCard(
-                    text: "Doctor Appointments", // More descriptive text
+                    text: "Doctor Appointments",
+                    color: Colors.amber,
                   ),
                 ),
                 GestureDetector(
@@ -123,21 +126,27 @@ class HomePage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             // Ensure the ListView doesn't have height constraints
             SizedBox(
-              height: 200.0, // Adjust height as needed
+              height: 100,
               child: ListView.builder(
+                scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                itemCount: 10, // Assuming 10 doctors
+                itemCount: _names.length, // Assuming 10 doctors
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text('Doctor #${index + 1}'), // Doctor names
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => DoctorDetails(
+                                name: _names[index],
+                              )));
+                    },
+                    child: DoctorCard(name: _names[index]),
                   );
                 },
               ),
             ),
-            const SizedBox(height: 20.0), // Add spacing for Factoid block
+            const SizedBox(height: 20.0),
 
             Container(
               padding: const EdgeInsets.all(10.0),
