@@ -34,7 +34,7 @@ class LoginPage extends StatelessWidget {
         title: Text('Welcome to HealthyEnough',
             style: TextStyle(
               fontSize: 20,
-              fontFamily: 'mont',
+              fontFamily: 'abz',
               fontWeight: FontWeight.w900,
               color: Color.fromARGB(255, 0, 0, 0),
             )),
@@ -67,7 +67,10 @@ class LoginPage extends StatelessWidget {
                   text: TextSpan(children: [
                     TextSpan(
                         text: 'Sign in with Google',
-                        style: TextStyle(fontSize: 18, color: Colors.black)),
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'abz',
+                            color: Colors.black)),
                   ]),
                 )))
       ]),
