@@ -6,6 +6,8 @@ import 'package:healthy_enough/screens/home_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../api/apis.dart';
+
 class UserKyc extends StatefulWidget {
   const UserKyc({Key? key}) : super(key: key);
 
@@ -174,7 +176,7 @@ class _UserKycState extends State<UserKyc> {
     // Add user to 'users' collection
     CollectionReference usersRef =
         FirebaseFirestore.instance.collection("users");
-    await usersRef.doc(userId).set({"type": "user"});
+    await usersRef.doc(userId).set({"type": "patient"});
 
     // Add user details to 'patients' collection
     CollectionReference patientsRef =
@@ -194,19 +196,21 @@ class _UserKycState extends State<UserKyc> {
   }
 
   String generateUserId() {
-    final String chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    Random rnd = Random();
-    String result = '';
-    for (var i = 0; i < 6; i++) {
-      result += chars[rnd.nextInt(chars.length)];
+    if (APIs.auth.currentUser != null) {
+      // Get the current user's Google ID (UID)
+      String googleId = APIs.auth.currentUser!.uid;
+      return googleId;
+    } else {
+      // If the user is not signed in, return a default value or handle accordingly
+      return '';
     }
-    return result;
+    ;
   }
-}
 
-void main() {
-  runApp(const MaterialApp(
-    title: 'Registration Page',
-    home: UserKyc(),
-  ));
+  void main() {
+    runApp(const MaterialApp(
+      title: 'Registration Page',
+      home: UserKyc(),
+    ));
+  }
 }
