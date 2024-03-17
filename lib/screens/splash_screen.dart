@@ -46,8 +46,8 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
     Timer(Duration(seconds: 5), () {
       if (FirebaseAuth.instance.currentUser != null) {
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (_) => DashboardPage()));
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => DashboardPage()));
       } else {
         Navigator.of(context)
             .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
@@ -63,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen>
         child: FadeTransition(
           opacity: _animation,
           child: Image.asset(
-            "assets/images/abhijeet-cid-meme.gif",
+            "assets/images/heldy.jpeg",
             width: 200,
             height: 200,
           ),

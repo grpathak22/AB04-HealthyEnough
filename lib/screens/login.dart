@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/apis.dart';
 import '../helper/dialogs.dart';
+import '../navbar/dashboardDoc.dart';
 
 late Size mq;
 bool _isAnimate = false;
@@ -45,17 +46,51 @@ class _LoginPageState extends State<LoginPage> {
   _handleGoogleBtnClick() {
     Dialogs.showProgressBar(context);
     _signInWithGoogle().then((user) {
-      // ignore: unnecessary_null_comparison
       Navigator.pop(context);
       if (user != null) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: ((context) => ModeSelection(
-                  onDoctorSelected: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => DashboardPage()));
-                  },
-                  onPatientSelected: () {},
-                ))));
+        // Check if the user exists in Firestore and retrieve their type
+        APIs.userExists().then((exists) {
+          if (exists) {
+            // User exists, retrieve their type and redirect accordingly
+            APIs.firestore
+                .collection('users')
+                .doc(APIs.user.uid)
+                .get()
+                .then((doc) {
+              if (doc.exists) {
+                String userType = doc['type'];
+                if (userType == 'doctor') {
+                  // Redirect to doctor's page
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => DashboardPageDoc(),
+                  ));
+                } else if (userType == 'patient') {
+                  // Redirect to patient's page
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) =>
+                        DashboardPage(), // or whichever page is appropriate for patients
+                  ));
+                }
+              }
+            }).catchError((error) {
+              print('Error retrieving user data: $error');
+              // Handle error
+            });
+          } else {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => ModeSelection(
+                onDoctorSelected: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const DoctorKYC()));
+                },
+                onPatientSelected: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const UserKyc()));
+                },
+              ),
+            ));
+          }
+        });
       }
     });
   }
@@ -114,16 +149,16 @@ class _LoginPageState extends State<LoginPage> {
             height: mq.height * 0.07,
             child: ElevatedButton.icon(
                 onPressed: () {
-                  // _handleGoogleBtnClick();
-                  //use following code to bypass security
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ModeSelection(onDoctorSelected: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const DoctorKYC()));
-                          }, onPatientSelected: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const UserKyc()));
-                          })));
+                  _handleGoogleBtnClick();
+                  // //use following code to bypass security
+                  // Navigator.of(context).push(MaterialPageRoute(
+                  //     builder: (context) => ModeSelection(onDoctorSelected: () {
+                  //           Navigator.of(context).push(MaterialPageRoute(
+                  //               builder: (context) => const DoctorKYC()));
+                  //         }, onPatientSelected: () {
+                  //           Navigator.of(context).push(MaterialPageRoute(
+                  //               builder: (context) => const UserKyc()));
+                  //         })));
                 },
                 style: ElevatedButton.styleFrom(
                   side: const BorderSide(

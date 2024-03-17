@@ -1,42 +1,63 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/screens/login.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../api/apis.dart'; // Import GoogleSignIn
+import '../../api/apis.dart';
+// Import GoogleSignIn
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class ProfilePageDoc extends StatefulWidget {
+  const ProfilePageDoc({Key? key}) : super(key: key);
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfilePageDoc> createState() => _ProfilePageDocState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  String name = "John Doe"; // Generic name
-  String email = "johndoe6@hehe.com"; // Example email
-  String address = "South Street, North Carolina"; // Example address
-  ImageProvider profileImage = const AssetImage(
-      'assets/images/profile_placeholder.png'); // Placeholder image
+class _ProfilePageDocState extends State<ProfilePageDoc> {
+  late String name = "";
+  late String email = "";
+  late int phoneNumber = 0;
+  late String qualifications = "";
+  late String specialization = "";
+  ImageProvider profileImage =
+      const AssetImage('assets/images/docIcon.png'); // Placeholder image
 
-  // Image picker for selecting profile photo
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> _getImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        profileImage = FileImage(File(pickedFile.path));
-      });
-    }
+  @override
+  void initState() {
+    super.initState();
+    // Fetch doctor's profile data from Firestore
+    fetchDoctorProfile();
   }
-
-  Future<void> _logout() async {
+   Future<void> _logout() async {
     await APIs.auth.signOut();
     await GoogleSignIn().signOut();
     await Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginPage()));
+  }
+  Future<void> fetchDoctorProfile() async {
+    try {
+      // Retrieve the current user's ID
+      String userId = APIs.auth.currentUser!.uid;
+      // Get the document snapshot from Firestore
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('doctors')
+          .doc(userId)
+          .get();
+      // Extract data from the snapshot
+      setState(() {
+        name = snapshot['Name'];
+        email = snapshot['Email'];
+        phoneNumber = snapshot['PhoneNumber'];
+        qualifications = snapshot['Qualifications'];
+        specialization = snapshot['Specialization'];
+        // You can add more fields here if needed
+      });
+    } catch (e) {
+      print('Error fetching doctor profile: $e');
+    }
   }
 
   @override
@@ -59,11 +80,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: CircleAvatar(
                   radius: 70.0,
                   backgroundImage: profileImage,
-                  child: IconButton(
-                    icon: const Icon(Icons.camera_alt),
-                    onPressed: _getImage,
-                    color: Colors.amber,
-                  ),
                 ),
               ),
               const SizedBox(height: 20.0),
@@ -87,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'Rahul', // Updated with generic name
+                        name,
                         style:
                             TextStyle(fontSize: 16.0, color: Colors.grey[600]),
                       ),
@@ -105,14 +121,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'rahul6@hehe.com', // Updated with example email
+                        email,
                         style:
                             TextStyle(fontSize: 16.0, color: Colors.grey[600]),
                       ),
                     ),
                     const SizedBox(height: 10.0),
                     Text(
-                      'Address:',
+                      'Phone Number:',
                       style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
@@ -123,7 +139,43 @@ class _ProfilePageState extends State<ProfilePage> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'South Street, North Carolina', // Replace with actual address
+                        phoneNumber.toString(),
+                        style:
+                            TextStyle(fontSize: 16.0, color: Colors.grey[600]),
+                      ),
+                    ),
+                    const SizedBox(height: 10.0),
+                    Text(
+                      'Qualifications:',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[800],
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        qualifications,
+                        style:
+                            TextStyle(fontSize: 16.0, color: Colors.grey[600]),
+                      ),
+                    ),
+                    const SizedBox(height: 10.0),
+                    Text(
+                      'Specialization:',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[800],
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        specialization,
                         style:
                             TextStyle(fontSize: 16.0, color: Colors.grey[600]),
                       ),
@@ -133,21 +185,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
 
               const SizedBox(height: 20.0),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Blood Type:'),
-                  Text('O+'), // Replace with user's blood type
-                ],
-              ),
-              const SizedBox(height: 10.0),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Emergency Contact:'),
-                  Text('123-456-7890'), // Replace with user's emergency contact
-                ],
-              ),
 
               // Save and Logout buttons with subtle button press animation
               Row(

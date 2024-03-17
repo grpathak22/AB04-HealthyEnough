@@ -7,6 +7,8 @@ import 'package:healthy_enough/screens/home_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../api/apis.dart';
+
 class DoctorKYC extends StatefulWidget {
   const DoctorKYC({Key? key}) : super(key: key);
 
@@ -215,15 +217,16 @@ class _DoctorKYCState extends State<DoctorKYC> {
   }
 
   String generateUserId() {
-    final String chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    Random rnd = Random();
-    String result = '';
-    for (var i = 0; i < 6; i++) {
-      result += chars[rnd.nextInt(chars.length)];
-    }
-    return result;
+    if (APIs.auth.currentUser != null) {
+    // Get the current user's Google ID (UID)
+    String googleId = APIs.auth.currentUser!.uid;
+    return googleId;
+  } else {
+    // If the user is not signed in, return a default value or handle accordingly
+    return '';
+  };
   }
-}
+  }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
