@@ -5,27 +5,23 @@ import 'package:flutter/widgets.dart';
 import 'package:healthy_enough/artificial_intelligence/analyzer.dart'; // (Placeholder for future use)
 import 'package:healthy_enough/screens/doctor/appointment.dart';
 import 'package:healthy_enough/screens/doctor/availibility.dart';
-import 'package:healthy_enough/screens/doctor_details.dart';
 import 'package:healthy_enough/screens/profile_screen.dart';
-import 'package:healthy_enough/widgets/doc_card.dart';
 import 'package:healthy_enough/widgets/home_card.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
-  final _names = ["John", "Jason", "Jonnathon", "Jacob"];
-  final _id = [1, 2, 3, 4];
+class HomePageDoc extends StatelessWidget {
+  const HomePageDoc({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber,
+        backgroundColor: Colors.teal,
         title: const Text(
           'Healthy Enough',
           style: TextStyle(
             fontSize: 22.0,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Color.fromARGB(255, 5, 3, 3),
           ),
         ),
         actions: [
@@ -41,7 +37,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -49,45 +45,24 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Hello!',
+                  'Hello, Doc!',
                   style: TextStyle(
                     fontSize: 28.0,
                     fontWeight: FontWeight.w600,
-                    color: Colors.amber,
+                    color: Colors.teal,
                   ),
                 ),
+                // Removed the entire GestureDetector wrapper
               ],
             ),
             const SizedBox(height: 20.0),
-            Row(
-              children: [
-                const SizedBox(width: 10.0), // Add some left padding
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      hintText:
-                          "Search for doctors ", // Consider specifying medicine search
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.search), // Magnifying glass icon
-                        onPressed: () {
-                          // Handle search functionality ( Implement your search logic here)
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10.0), // Add some right padding
-              ],
-            ),
+
+            // Search field with magnifying glass icon
 
             const SizedBox(height: 20.0),
 
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
                   onTap: () {
@@ -96,8 +71,9 @@ class HomePage extends StatelessWidget {
                     ));
                   },
                   child: const HomeCard(
+                    color: Colors.teal,
                     text: "Doctor Appointments",
-                    color: Colors.amber,
+                    // More descriptive text
                   ),
                 ),
                 GestureDetector(
@@ -105,13 +81,14 @@ class HomePage extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return _MedicineSearchPopup(); // Build the MedicineSearchPopup widget
+                        return DoctorAvailabilityPage(); // Build the MedicineSearchPopup widget
                       },
                     );
                   },
                   child: const HomeCard(
-                    text: "Medicine Searcher", // Renamed section
-                  ),
+                      color: Colors.teal, text: "Set Availability"
+                      // Renamed section
+                      ),
                 ),
               ],
             ),
@@ -119,43 +96,38 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 20.0), // Add spacing for doctor list
 
             const Text(
-              'Top 10 Doctors:',
+              'Pending Appointments',
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
+
             // Ensure the ListView doesn't have height constraints
             SizedBox(
-              height: 100,
+              height: 200.0, // Adjust height as needed
               child: ListView.builder(
-                scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                itemCount: _names.length, // Assuming 10 doctors
+                itemCount: 10, // Assuming 10 doctors
                 itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => DoctorDetails(
-                                name: _names[index],
-                              )));
-                    },
-                    child: DoctorCard(name: _names[index]),
+                  return ListTile(
+                    title: Text('Appointments#${index + 1}'), // Doctor names
                   );
                 },
               ),
             ),
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 20.0), // Add spacing for Factoid block
 
             Container(
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
-                color: Colors.amber.withOpacity(0.2), // Light teal background
+                color: const Color.fromARGB(255, 0, 15, 14)
+                    .withOpacity(0.2), // Light teal background
               ),
               child: const Row(
                 children: [
-                  Icon(Icons.lightbulb_outline, color: Colors.amber),
+                  Icon(Icons.lightbulb_outline, color: Colors.teal),
                   SizedBox(width: 10.0),
                   Flexible(
                     child: Text(

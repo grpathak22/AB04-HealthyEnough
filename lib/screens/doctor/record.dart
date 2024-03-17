@@ -2,15 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/helper/medical_record.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 class MedicalRecordPage extends StatefulWidget {
   final int patientId; // Pass patient ID from previous page
 
-  const MedicalRecordPage({Key? key, required this.patientId}) : super(key: key);
+  const MedicalRecordPage({Key? key, required this.patientId})
+      : super(key: key);
 
   @override
   State<MedicalRecordPage> createState() => _MedicalRecordPageState();
 }
-
 
 class MedicalRecord {
   // Assuming you have a reference to your Firestore collection
@@ -22,7 +23,6 @@ class MedicalRecord {
     return medicalRecordsCollection.snapshots();
   }
 }
-
 
 class _MedicalRecordPageState extends State<MedicalRecordPage> {
   final MedicalRecord medicalRecord = MedicalRecord();
@@ -42,9 +42,9 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
             return ListView.builder(
               itemCount: records.length,
               itemBuilder: (context, index) {
-                Map<String, dynamic> recordData = records[index].data() as Map<String, dynamic>;
+                Map<String, dynamic> recordData =
+                    records[index].data() as Map<String, dynamic>;
 
-                // Build a list of Text widgets for each field in the record
                 List<Widget> fields = [];
                 recordData.forEach((key, value) {
                   fields.add(
@@ -63,8 +63,8 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    ...fields, // Spread operator to include the list of Text widgets
-                    Divider(), // Add a divider between records
+                    ...fields,
+                    Divider(),
                   ],
                 );
               },

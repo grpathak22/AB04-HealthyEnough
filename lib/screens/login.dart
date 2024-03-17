@@ -8,9 +8,11 @@ import 'package:healthy_enough/screens/doctor/kyc_doctor.dart';
 import 'package:healthy_enough/screens/doctor/kyc_user.dart';
 import 'package:healthy_enough/screens/home_screen.dart';
 import 'package:healthy_enough/screens/mode_select.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/apis.dart';
 import '../helper/dialogs.dart';
+import '../navbar/dashboardDoc.dart';
 
 late Size mq;
 bool _isAnimate = false;
@@ -42,55 +44,56 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   _handleGoogleBtnClick() {
-  Dialogs.showProgressBar(context);
-  _signInWithGoogle().then((user) {
-    Navigator.pop(context);
-    if (user != null) {
-      // Check if the user exists in Firestore and retrieve their type
-      APIs.userExists().then((exists) {
-        if (exists) {
-          // User exists, retrieve their type and redirect accordingly
-          APIs.firestore.collection('users').doc(APIs.user.uid).get().then((doc) {
-            if (doc.exists) {
-              String userType = doc['type'];
-              if (userType == 'doctor') {
-                // Redirect to doctor's page
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => DashboardPage(),
-                ));
-              } else if (userType == 'patient') {
-                // Redirect to patient's page
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => UserKyc(), // or whichever page is appropriate for patients
-                ));
+    Dialogs.showProgressBar(context);
+    _signInWithGoogle().then((user) {
+      Navigator.pop(context);
+      if (user != null) {
+        // Check if the user exists in Firestore and retrieve their type
+        APIs.userExists().then((exists) {
+          if (exists) {
+            // User exists, retrieve their type and redirect accordingly
+            APIs.firestore
+                .collection('users')
+                .doc(APIs.user.uid)
+                .get()
+                .then((doc) {
+              if (doc.exists) {
+                String userType = doc['type'];
+                if (userType == 'doctor') {
+                  // Redirect to doctor's page
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => DashboardPageDoc(),
+                  ));
+                } else if (userType == 'patient') {
+                  // Redirect to patient's page
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) =>
+                        DashboardPage(), // or whichever page is appropriate for patients
+                  ));
+                }
               }
-            }
-          }).catchError((error) {
-            print('Error retrieving user data: $error');
-            // Handle error
-          });
-        } else {
-          // User does not exist, redirect to ModeSelection page
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => ModeSelection(
-              onDoctorSelected: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => DoctorKYC(),
-                ));
-              },
-              onPatientSelected: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => UserKyc(),
-                ));
-              },
-            ),
-          ));
-        }
-      });
-    }
-  });
-}
-
+            }).catchError((error) {
+              print('Error retrieving user data: $error');
+              // Handle error
+            });
+          } else {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => ModeSelection(
+                onDoctorSelected: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const DoctorKYC()));
+                },
+                onPatientSelected: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const UserKyc()));
+                },
+              ),
+            ));
+          }
+        });
+      }
+    });
+  }
 
   Future<UserCredential?> _signInWithGoogle() async {
     // Trigger the authentication flow
@@ -111,6 +114,8 @@ class _LoginPageState extends State<LoginPage> {
 
       if (userCredential != null) {
         Dialogs.showSuccess(context, 'Login Successful!');
+        final sharedPrefs = await SharedPreferences.getInstance();
+        await sharedPrefs.setString('UserId', userCredential.user!.uid);
       }
       // ignore: dead_code
       return userCredential;
@@ -145,22 +150,26 @@ class _LoginPageState extends State<LoginPage> {
             child: ElevatedButton.icon(
                 onPressed: () {
                   _handleGoogleBtnClick();
-                  //use following code to bypass security
+                  // //use following code to bypass security
                   // Navigator.of(context).push(MaterialPageRoute(
                   //     builder: (context) => ModeSelection(onDoctorSelected: () {
                   //           Navigator.of(context).push(MaterialPageRoute(
-                  //               builder: (context) => DoctorKYC()));
+                  //               builder: (context) => const DoctorKYC()));
                   //         }, onPatientSelected: () {
                   //           Navigator.of(context).push(MaterialPageRoute(
-                  //               builder: (context) => UserKyc()));
+                  //               builder: (context) => const UserKyc()));
                   //         })));
                 },
                 style: ElevatedButton.styleFrom(
+                  side: const BorderSide(
+                    width: 2,
+                  ),
                   shape: StadiumBorder(),
-                  elevation: 8,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
                 ),
                 icon: Transform.scale(
-                  scale: 0.6,
+                  scale: 0.5,
                   child: Image.asset('assets/images/google.png'),
                 ),
                 label: RichText(

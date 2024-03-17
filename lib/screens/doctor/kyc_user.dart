@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/navbar/dashboard.dart';
+import 'package:healthy_enough/screens/home_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -203,12 +204,13 @@ class _UserKycState extends State<UserKyc> {
       // If the user is not signed in, return a default value or handle accordingly
       return '';
     }
+    ;
   }
-}
 
-void main() {
-  runApp(const MaterialApp(
-    title: 'Registration Page',
-    home: UserKyc(),
-  ));
+  void main() {
+    runApp(const MaterialApp(
+      title: 'Registration Page',
+      home: UserKyc(),
+    ));
+  }
 }

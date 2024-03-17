@@ -2,7 +2,8 @@ import 'dart:math';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:healthy_enough/navbar/dashboard.dart';
+import 'package:healthy_enough/navbar/dashboardDoc.dart';
+import 'package:healthy_enough/screens/home_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -191,15 +192,12 @@ class _DoctorKYCState extends State<DoctorKYC> {
   }
 
   void _register(BuildContext context) async {
-    // Generate a random user ID
     String userId = generateUserId();
 
-    // Add user to 'users' collection
     CollectionReference usersRef =
         FirebaseFirestore.instance.collection("users");
     await usersRef.doc(userId).set({"type": "doctor"});
 
-    // Add doctor details to 'doctors' collection
     CollectionReference doctorsRef =
         FirebaseFirestore.instance.collection("doctors");
     await doctorsRef.doc(userId).set({
@@ -214,19 +212,19 @@ class _DoctorKYCState extends State<DoctorKYC> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => DashboardPage()),
+      MaterialPageRoute(builder: (context) => DashboardPageDoc()),
     );
   }
 
   String generateUserId() {
     if (APIs.auth.currentUser != null) {
-      // Get the current user's Google ID (UID)
-      String googleId = APIs.auth.currentUser!.uid;
-      return googleId;
-    } else {
-      // If the user is not signed in, return a default value or handle accordingly
-      return '';
-    }
+    // Get the current user's Google ID (UID)
+    String googleId = APIs.auth.currentUser!.uid;
+    return googleId;
+  } else {
+    // If the user is not signed in, return a default value or handle accordingly
+    return '';
+  };
   }
   }
 

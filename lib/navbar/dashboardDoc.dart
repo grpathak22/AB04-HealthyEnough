@@ -1,20 +1,20 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/screens/calendar_screen.dart';
-import 'package:healthy_enough/screens/home_screen.dart';
+import 'package:healthy_enough/screens/home_screendoc.dart';
 import 'package:healthy_enough/screens/record_scanner.dart';
 
-class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
+class DashboardPageDoc extends StatefulWidget {
+  const DashboardPageDoc({super.key});
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  State<DashboardPageDoc> createState() => _DashboardPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _DashboardPageState extends State<DashboardPageDoc> {
   int _page = 0;
   final pages = [
-    HomePage(),
+    const HomePageDoc(),
     CalendarPage(),
     const RecordScanner(),
   ];
@@ -24,8 +24,8 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
           backgroundColor: Colors.transparent,
-          buttonBackgroundColor: Colors.amber,
-          color: Colors.amber,
+          buttonBackgroundColor: Colors.teal,
+          color: Colors.teal,
           animationDuration: const Duration(milliseconds: 300),
           onTap: (index) {
             setState(() {
