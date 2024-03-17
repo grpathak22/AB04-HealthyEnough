@@ -17,15 +17,9 @@ class UserKyc extends StatefulWidget {
 
 class _UserKycState extends State<UserKyc> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   int currentPage = 1;
-  String _name = "";
-  String _age = "";
-  String _weight = "";
-  String _height = "";
-  String _bloodgrp = "";
-  String _address = "";
-
+  Map<String, dynamic> formData = {};
+ TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +72,7 @@ class _UserKycState extends State<UserKyc> {
           validator: (value) {
             // Add validation logic
           },
-          onSaved: (newValue) => _name = newValue!,
+          onSaved: (newValue) => formData['name'] = newValue!,
         ),
         const SizedBox(height: 20.0),
         TextFormField(
@@ -90,7 +84,7 @@ class _UserKycState extends State<UserKyc> {
           validator: (value) {
             // Add validation logic
           },
-          onSaved: (newValue) => _address = newValue!,
+          onSaved: (newValue) => formData['address'] = newValue!,
         ),
         const SizedBox(height: 20.0),
         TextFormField(
@@ -102,7 +96,7 @@ class _UserKycState extends State<UserKyc> {
           validator: (value) {
             // Add validation logic
           },
-          onSaved: (newValue) => _age = newValue!,
+          onSaved: (newValue) => formData['age'] = newValue!,
         ),
       ],
     );
@@ -120,7 +114,7 @@ class _UserKycState extends State<UserKyc> {
           validator: (value) {
             // Add validation logic
           },
-          onSaved: (newValue) => _height = newValue!,
+          onSaved: (newValue) => formData['height'] = newValue!,
         ),
         const SizedBox(height: 20.0),
         TextFormField(
@@ -131,10 +125,9 @@ class _UserKycState extends State<UserKyc> {
             ),
             validator: (value) {
               return null;
-
               // Add validation logic
             },
-            onSaved: (newValue) => _weight),
+            onSaved: (newValue) => formData['weight'] = newValue),
         TextFormField(
           decoration: const InputDecoration(
             labelText: 'Blood Group',
@@ -144,7 +137,7 @@ class _UserKycState extends State<UserKyc> {
           validator: (value) {
             // Add validation logic
           },
-          onSaved: (newValue) => _height = newValue!,
+          onSaved: (newValue) => formData['bloodGroup'] = newValue!,
         ),
       ],
     );
@@ -162,6 +155,7 @@ class _UserKycState extends State<UserKyc> {
           _formKey.currentState!.save();
           setState(() {
             currentPage++;
+            formData.clear(); // Clear the form data
           });
         }
       },
@@ -182,12 +176,12 @@ class _UserKycState extends State<UserKyc> {
     CollectionReference patientsRef =
         FirebaseFirestore.instance.collection("patients");
     await patientsRef.doc(userId).set({
-      "Name": _name,
-      "Age": _age,
-      "Weight": _weight,
-      "Height": _height,
-      "Address": _address,
-      "BloodGroup": _bloodgrp,
+      "Name": formData['name'],
+      "Age": formData['age'],
+      "Weight": formData['weight'],
+      "Height": formData['height'],
+      "Address": formData['address'],
+      "BloodGroup": formData['bloodGroup'],
     });
 
     Navigator.pushReplacement(
@@ -205,13 +199,5 @@ class _UserKycState extends State<UserKyc> {
       // If the user is not signed in, return a default value or handle accordingly
       return '';
     }
-    ;
-  }
-
-  void main() {
-    runApp(const MaterialApp(
-      title: 'Registration Page',
-      home: UserKyc(),
-    ));
   }
 }
