@@ -15,6 +15,7 @@ class UserKyc extends StatefulWidget {
 
 class _UserKycState extends State<UserKyc> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController controller = TextEditingController();
 
   int currentPage = 1;
   String _name = "";
@@ -68,6 +69,7 @@ class _UserKycState extends State<UserKyc> {
     return Column(
       children: [
         TextFormField(
+          controller: controller,
           decoration: const InputDecoration(
             labelText: 'Name',
             hintText: 'Enter your name',
@@ -80,6 +82,7 @@ class _UserKycState extends State<UserKyc> {
         ),
         const SizedBox(height: 20.0),
         TextFormField(
+          controller: controller,
           decoration: const InputDecoration(
             labelText: 'Address',
             hintText: 'Enter your address',
@@ -92,6 +95,7 @@ class _UserKycState extends State<UserKyc> {
         ),
         const SizedBox(height: 20.0),
         TextFormField(
+          controller: controller,
           decoration: const InputDecoration(
             labelText: 'Age',
             hintText: 'Enter your Age',
@@ -110,6 +114,7 @@ class _UserKycState extends State<UserKyc> {
     return Column(
       children: [
         TextFormField(
+          controller: controller,
           decoration: const InputDecoration(
             labelText: 'Height',
             hintText: 'Enter your Height',
@@ -122,6 +127,7 @@ class _UserKycState extends State<UserKyc> {
         ),
         const SizedBox(height: 20.0),
         TextFormField(
+            controller: controller,
             decoration: const InputDecoration(
               labelText: 'Weight',
               hintText: 'Enter your weight',
@@ -133,7 +139,9 @@ class _UserKycState extends State<UserKyc> {
               // Add validation logic
             },
             onSaved: (newValue) => _weight),
+        const SizedBox(height: 20.0),
         TextFormField(
+          controller: controller,
           decoration: const InputDecoration(
             labelText: 'Blood Group',
             hintText: 'Enter your Blood Group',

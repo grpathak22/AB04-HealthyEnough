@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_enough/artificial_intelligence/connection.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AnalyzerPage extends StatefulWidget {
   final String extractedText;
@@ -59,7 +60,7 @@ class _AnalyzerPageState extends State<AnalyzerPage> {
   "Estradiol (Females)": null,
   "PSA (Males)": null
 }
-  Extract the above terms from the given data and convert it into a json format file''';
+  Extract the above terms from the given data and write a json string like the above given''';
   bool connected = false;
   late final conn;
 
@@ -108,9 +109,11 @@ class _AnalyzerPageState extends State<AnalyzerPage> {
   }
 
   Future<void> updateDatabase() async {
-    final patData = json.decode(prompt);
+    final patData = jsonDecode(prompt) as Map<String, dynamic>;
+    final sharePrefs = await SharedPreferences.getInstance();
+    final userId = sharePrefs.getString("UserId");
 
-    patRec.add(patData).whenComplete(() {
+    await patRec.doc(userId).set(patData).whenComplete(() {
       print("data added successfully");
     });
   }

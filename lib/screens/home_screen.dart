@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:healthy_enough/artificial_intelligence/analyzer.dart'; // (Placeholder for future use)
+import 'package:healthy_enough/artificial_intelligence/analyzer.dart';
 import 'package:healthy_enough/screens/doctor/appointment.dart';
 import 'package:healthy_enough/screens/doctor/availibility.dart';
 import 'package:healthy_enough/screens/doctor_details.dart';
@@ -10,10 +11,76 @@ import 'package:healthy_enough/screens/profile_screen.dart';
 import 'package:healthy_enough/widgets/doc_card.dart';
 import 'package:healthy_enough/widgets/home_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
-  final _names = ["John", "Jason", "Jonnathon", "Jacob"];
-  final _id = [1, 2, 3, 4];
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  CollectionReference doctorRef =
+      FirebaseFirestore.instance.collection("doctors");
+
+  final _names = [];
+  final _id = [];
+  final _adrs = [];
+  final _email = [];
+  final _phone = [];
+  final _qual = [];
+  final _specs = [];
+
+  Widget _getDoctorNames() {
+    return FutureBuilder(
+      future: doctorRef.get(),
+      builder: (context, snapshots) {
+        if (snapshots.hasData) {
+          final doclist = [];
+          for (int i = 0; i < snapshots.data!.size; i++) {
+            _names.add(snapshots.data!.docs[i]['Name']);
+            _id.add(snapshots.data!.docs[i]);
+            _adrs.add(snapshots.data!.docs[i]['Address']);
+            _email.add(snapshots.data!.docs[i]['Email']);
+            _phone.add(snapshots.data!.docs[i]['PhoneNumber']);
+            _qual.add(snapshots.data!.docs[i]['Qualifications']);
+            _specs.add(snapshots.data!.docs[i]['Specialization']);
+            doclist.add([
+              _names[i],
+              _id[i],
+              _adrs[i],
+              _email[i],
+              _phone[i],
+              _qual[i],
+              _specs[i]
+            ]);
+          }
+
+          return ListView.builder(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            itemCount: snapshots.data!.size,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => DoctorDetails(
+                            docData: doclist[index],
+                          )));
+                },
+                child: DoctorCard(name: _names[index]),
+              );
+            },
+          );
+        } else {
+          return const Card(
+            child: Center(
+              child: Text("Loading or No doctors yet..."),
+            ),
+          );
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,18 +172,18 @@ class HomePage extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return _MedicineSearchPopup(); // Build the MedicineSearchPopup widget
+                        return _MedicineSearchPopup();
                       },
                     );
                   },
                   child: const HomeCard(
-                    text: "Medicine Searcher", // Renamed section
+                    text: "Medicine Searcher",
                   ),
                 ),
               ],
             ),
 
-            const SizedBox(height: 20.0), // Add spacing for doctor list
+            const SizedBox(height: 20.0),
 
             const Text(
               'Top 10 Doctors:',
@@ -125,25 +192,9 @@ class HomePage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            // Ensure the ListView doesn't have height constraints
             SizedBox(
               height: 100,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemCount: _names.length, // Assuming 10 doctors
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => DoctorDetails(
-                                name: _names[index],
-                              )));
-                    },
-                    child: DoctorCard(name: _names[index]),
-                  );
-                },
-              ),
+              child: _getDoctorNames(),
             ),
             const SizedBox(height: 20.0),
 
