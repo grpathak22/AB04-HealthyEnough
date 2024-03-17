@@ -187,6 +187,7 @@ class _UserKycState extends State<UserKyc> {
       "Weight": _weight,
       "Height": _height,
       "Address": _address,
+      "BloodGroup": _bloodgrp,
     });
 
     Navigator.pushReplacement(

@@ -5,8 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'package:healthy_enough/artificial_intelligence/analyzer.dart'; // (Placeholder for future use)
 import 'package:healthy_enough/screens/doctor/appointment.dart';
 import 'package:healthy_enough/screens/doctor/availibility.dart';
-import 'package:healthy_enough/screens/profile_screen.dart';
+import 'package:healthy_enough/screens/profile_screen_patient.dart';
 import 'package:healthy_enough/widgets/home_card.dart';
+
+import 'doctor/profile_screen_doctor.dart';
 
 class HomePageDoc extends StatelessWidget {
   const HomePageDoc({super.key});
@@ -30,7 +32,7 @@ class HomePageDoc extends StatelessWidget {
             color: Colors.white,
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const ProfilePage(),
+                builder: (context) => const ProfilePageDoc(),
               ));
             },
           ),

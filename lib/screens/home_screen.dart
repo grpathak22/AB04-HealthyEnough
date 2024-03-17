@@ -6,7 +6,7 @@ import 'package:healthy_enough/artificial_intelligence/analyzer.dart'; // (Place
 import 'package:healthy_enough/screens/doctor/appointment.dart';
 import 'package:healthy_enough/screens/doctor/availibility.dart';
 import 'package:healthy_enough/screens/doctor_details.dart';
-import 'package:healthy_enough/screens/profile_screen.dart';
+import 'package:healthy_enough/screens/profile_screen_patient.dart';
 import 'package:healthy_enough/widgets/doc_card.dart';
 import 'package:healthy_enough/widgets/home_card.dart';
 
