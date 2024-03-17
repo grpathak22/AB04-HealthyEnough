@@ -27,7 +27,7 @@ class ModeSelection extends StatelessWidget {
                   padding: const EdgeInsets.all(15),
                   margin: const EdgeInsets.all(10),
                   decoration: const BoxDecoration(
-                    color: Colors.red,
+                    color: Colors.teal,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomLeft: Radius.circular(20),

@@ -8,6 +8,7 @@ import 'package:healthy_enough/screens/doctor/kyc_doctor.dart';
 import 'package:healthy_enough/screens/doctor/kyc_user.dart';
 import 'package:healthy_enough/screens/home_screen.dart';
 import 'package:healthy_enough/screens/mode_select.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/apis.dart';
 import '../helper/dialogs.dart';
@@ -78,6 +79,8 @@ class _LoginPageState extends State<LoginPage> {
 
       if (userCredential != null) {
         Dialogs.showSuccess(context, 'Login Successful!');
+        final sharedPrefs = await SharedPreferences.getInstance();
+        await sharedPrefs.setString('UserId', userCredential.user!.uid);
       }
       // ignore: dead_code
       return userCredential;
@@ -116,10 +119,10 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ModeSelection(onDoctorSelected: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => DoctorKYC()));
+                                builder: (context) => const DoctorKYC()));
                           }, onPatientSelected: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => UserKyc()));
+                                builder: (context) => const UserKyc()));
                           })));
                 },
                 style: ElevatedButton.styleFrom(
