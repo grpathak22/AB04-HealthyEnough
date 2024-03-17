@@ -22,7 +22,7 @@ AI-Powered Insights: Integrated with the Google's Gemini API to provide doctor c
 
 ## Demo
 
-Insert gif or link to demo
+(https://youtu.be/Ric592cTmwM)
 
 
 ## Run Locally
