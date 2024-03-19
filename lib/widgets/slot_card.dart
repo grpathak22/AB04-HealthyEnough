@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 
 class SlotCard extends StatefulWidget {
   final bool isSelected;
+  final String slot;
 
-  const SlotCard({required this.isSelected});
+  const SlotCard({
+    Key? key,
+    required this.isSelected,
+    required this.slot,
+  }) : super(key: key);
 
   @override
   State<SlotCard> createState() => _SlotCardState();
 }
 
 class _SlotCardState extends State<SlotCard> {
-  bool _selected = false;
+  late bool _selected;
 
   @override
   void initState() {
@@ -33,7 +38,7 @@ class _SlotCardState extends State<SlotCard> {
           color: _selected ? Colors.grey : Colors.white,
           borderRadius: BorderRadius.circular(40),
         ),
-        child: Center(child: Text("Slot")),
+        child: Center(child: Text(widget.slot)),
       ),
     );
   }

@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:healthy_enough/widgets/slot_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DoctorDetails extends StatefulWidget {
   final docData;
-  const DoctorDetails({super.key, required this.docData});
+  const DoctorDetails({Key? key, required this.docData}) : super(key: key);
 
   @override
   State<DoctorDetails> createState() => _DoctorDetailsState();
@@ -15,8 +15,48 @@ class DoctorDetails extends StatefulWidget {
 class _DoctorDetailsState extends State<DoctorDetails> {
   final CollectionReference doctorRef =
       FirebaseFirestore.instance.collection("appointments");
-  final CollectionReference docRef =
-      FirebaseFirestore.instance.collection("doctors");
+
+  List<String> _availableSlots = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch available slots from the availability collection
+    _fetchAvailableSlots();
+  }
+
+  Future<void> _fetchAvailableSlots() async {
+    try {
+      final availabilitySnapshot = await FirebaseFirestore.instance
+          .collection('availability')
+          .doc(widget.docData['doctorId'])
+          .get();
+
+      if (availabilitySnapshot.exists) {
+        final data = availabilitySnapshot.data() as Map<String, dynamic>;
+        final Map<String, dynamic>? availableTimes = data['availableTimes'];
+
+        if (availableTimes != null) {
+          final List<String> slots = [];
+          availableTimes.forEach((key, value) {
+            if (value != null) {
+              slots.add('$key: ${value['startTime']} - ${value['endTime']}');
+            }
+          });
+
+          setState(() {
+            _availableSlots = slots;
+          });
+        } else {
+          print('Available times data is null');
+        }
+      } else {
+        print('Availability data does not exist');
+      }
+    } catch (error) {
+      print("Error fetching available slots: $error");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,14 +125,18 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                         fontSize: 20,
                       )),
                   const Text("Check for availability: "),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.all(10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text("Time slots: "),
-                        SlotCard(isSelected: false),
-                        SlotCard(isSelected: false),
+                        for (String slot in _availableSlots)
+                          SlotCard(
+                            isSelected:
+                                false, // You can adjust this based on selected slots
+                            slot: slot,
+                          ),
                       ],
                     ),
                   )
