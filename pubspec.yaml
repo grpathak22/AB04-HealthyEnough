@@ -39,6 +39,7 @@ dependencies:
   google_generative_ai: ^0.2.2
   cloud_firestore: ^4.15.9
   shared_preferences: ^2.2.2
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,9 @@ flutter:
     - family: abz
       fonts:
         - asset: assets/fonts/abz.ttf
+    - family: charmonman
+      fonts:
+        - asset: assets/fonts/charmonman.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
