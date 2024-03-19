@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:healthy_enough/widgets/slot_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DoctorDetails extends StatefulWidget {
-  // final int id;
-  final String name;
-  const DoctorDetails({super.key, required this.name});
+  final docData;
+  const DoctorDetails({super.key, required this.docData});
 
   @override
   State<DoctorDetails> createState() => _DoctorDetailsState();
@@ -15,6 +15,8 @@ class DoctorDetails extends StatefulWidget {
 class _DoctorDetailsState extends State<DoctorDetails> {
   final CollectionReference doctorRef =
       FirebaseFirestore.instance.collection("appointments");
+  final CollectionReference docRef =
+      FirebaseFirestore.instance.collection("doctors");
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                   size: 100,
                 ),
                 Text(
-                  widget.name,
+                  widget.docData[0],
                   style: const TextStyle(
                     fontFamily: "abz",
                     fontSize: 30,
@@ -48,16 +50,42 @@ class _DoctorDetailsState extends State<DoctorDetails> {
             ),
           ),
           SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
+              width: mq.size.width * 0.9,
               height: mq.size.height * 0.5,
-              child: const Column(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("Work exp or info fetched of this doctor"),
-                  Text("Work exp or info fetched of this doctor"),
-                  Text("Work exp or info fetched of this doctor"),
-                  Text("Check for availability: "),
-                  Padding(
+                  Text(
+                    "Qualifications: " + widget.docData[5],
+                    style: const TextStyle(
+                      fontFamily: "abz",
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text("Specifications: " + widget.docData[6],
+                      style: const TextStyle(
+                        fontFamily: "abz",
+                        fontSize: 20,
+                      )),
+                  Text("Email: " + widget.docData[3],
+                      style: const TextStyle(
+                        fontFamily: "abz",
+                        fontSize: 20,
+                      )),
+                  Text("Address: " + widget.docData[2],
+                      style: const TextStyle(
+                        fontFamily: "abz",
+                        fontSize: 20,
+                      )),
+                  Text("Phone Number: " + widget.docData[4].toString(),
+                      style: const TextStyle(
+                        fontFamily: "abz",
+                        fontSize: 20,
+                      )),
+                  const Text("Check for availability: "),
+                  const Padding(
                     padding: EdgeInsets.all(10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -95,13 +123,15 @@ class _DoctorDetailsState extends State<DoctorDetails> {
   }
 
   Future<void> handleAppointmentRequests() async {
+    final sharePref = await SharedPreferences.getInstance();
     Map<String, dynamic> apptmt = {
-      "patId": 1,
+      "patId": sharePref.get('UserId'),
+      "docName": widget.docData[0],
       "slot": "9.00-11.00",
       "status": false,
     };
 
-    await doctorRef.doc("doc1").set(apptmt).whenComplete(() {
+    await doctorRef.doc(widget.docData[3]).set(apptmt).whenComplete(() {
       print("appointment set");
     });
   }
