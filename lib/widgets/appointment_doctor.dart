@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_enough/artificial_intelligence/connection.dart';
+import 'package:healthy_enough/artificial_intelligence/patient_analyzed.dart';
 
 class AppointmentCardDoctor extends StatefulWidget {
   final String patid;
@@ -27,6 +29,7 @@ class AppointmentCardDoctor extends StatefulWidget {
 class _AppointmentCardDoctorState extends State<AppointmentCardDoctor> {
   final _overlayController = OverlayPortalController();
   late DocumentSnapshot<Map<String, dynamic>> patDets;
+  String _analyzeResult = "";
 
   @override
   void initState() {
@@ -150,7 +153,36 @@ class _AppointmentCardDoctorState extends State<AppointmentCardDoctor> {
                                 1: FlexColumnWidth(1),
                               },
                               children: _formRecordTable(),
-                            )
+                            ),
+                            const SizedBox(height: 20),
+                            Center(
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    _analyzePatientRecords();
+                                    if (_analyzeResult != "") {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PatientAnalysis(
+                                                    analyzedData:
+                                                        _analyzeResult,
+                                                  )));
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    shape: const StadiumBorder(),
+                                    backgroundColor: Colors.black,
+                                  ),
+                                  child: const Text(
+                                    "Analyze Records",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: "abz",
+                                      color: Colors.teal,
+                                    ),
+                                  )),
+                            ),
                           ],
                         ),
                       ),
@@ -208,5 +240,18 @@ class _AppointmentCardDoctorState extends State<AppointmentCardDoctor> {
     });
 
     return rows;
+  }
+
+  Future<void> _analyzePatientRecords() async {
+    final model = EnoughAi();
+    final prompt =
+        '''Analyze these patient records and tell me something about the patient that could be concerning:\n
+            ${patDets.data()!.toString()}. Give one liner answers for each concerning thing''';
+
+    await model.connectKey();
+    String? result = await model.promptGen(prompt);
+    setState(() {
+      _analyzeResult = result.toString();
+    });
   }
 }

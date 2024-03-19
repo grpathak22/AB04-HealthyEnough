@@ -22,11 +22,11 @@ class _HomePageDocState extends State<HomePageDoc> {
   // late Map<String, dynamic> drugInfo;
   final DrugApi drpi = DrugApi();
 
-  @override
-  Future<void> initState() async {
-    super.initState();
-    await drpi.fetchDrugSummaryByName();
-  }
+  // @override
+  // Future<void> initState() async {
+  //   super.initState();
+  //   await drpi.fetchDrugSummaryByName();
+  // }
 
   // Widget _drugListBuild() {
   //   return ListView.builder(
