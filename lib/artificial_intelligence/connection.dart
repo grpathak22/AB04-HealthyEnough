@@ -1,7 +1,7 @@
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 class EnoughAi {
-  final apiKey = 'AIzaSyBXgor-9urHz7-xMPfRyTIW6VDsvxen8hU';
+  final apiKey = 'AIzaSyASPvQYnbQgPO7ROqOlHotlieNdFhVBH0E';
   GenerativeModel? model;
 
   Future<bool> connectKey() async {
