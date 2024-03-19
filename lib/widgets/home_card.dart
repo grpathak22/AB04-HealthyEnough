@@ -36,8 +36,9 @@ class HomeCard extends StatelessWidget {
           text,
           style: const TextStyle(
             fontSize: 15,
-            fontWeight: FontWeight.w300,
+            fontWeight: FontWeight.w500,
             fontFamily: "abz",
+            color: Colors.black,
           ),
         ),
       ),

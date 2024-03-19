@@ -17,7 +17,14 @@ class UserKyc extends StatefulWidget {
 
 class _UserKycState extends State<UserKyc> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController controller = TextEditingController();
+
+  // Separate controllers for each text field
+  final nameController = TextEditingController();
+  final addressController = TextEditingController();
+  final ageController = TextEditingController();
+  final heightController = TextEditingController();
+  final weightController = TextEditingController();
+  final bloodGrpController = TextEditingController();
 
   int currentPage = 1;
   String _name = "";
@@ -71,7 +78,7 @@ class _UserKycState extends State<UserKyc> {
     return Column(
       children: [
         TextFormField(
-          controller: controller,
+          controller: nameController,
           decoration: const InputDecoration(
             labelText: 'Name',
             hintText: 'Enter your name',
@@ -84,7 +91,7 @@ class _UserKycState extends State<UserKyc> {
         ),
         const SizedBox(height: 20.0),
         TextFormField(
-          controller: controller,
+          controller: addressController,
           decoration: const InputDecoration(
             labelText: 'Address',
             hintText: 'Enter your address',
@@ -97,7 +104,7 @@ class _UserKycState extends State<UserKyc> {
         ),
         const SizedBox(height: 20.0),
         TextFormField(
-          controller: controller,
+          controller: ageController,
           decoration: const InputDecoration(
             labelText: 'Age',
             hintText: 'Enter your Age',
@@ -116,7 +123,7 @@ class _UserKycState extends State<UserKyc> {
     return Column(
       children: [
         TextFormField(
-          controller: controller,
+          controller: heightController,
           decoration: const InputDecoration(
             labelText: 'Height',
             hintText: 'Enter your Height',
@@ -129,21 +136,20 @@ class _UserKycState extends State<UserKyc> {
         ),
         const SizedBox(height: 20.0),
         TextFormField(
-            controller: controller,
-            decoration: const InputDecoration(
-              labelText: 'Weight',
-              hintText: 'Enter your weight',
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
-              return null;
-
-              // Add validation logic
-            },
-            onSaved: (newValue) => _weight),
+          controller: weightController,
+          decoration: const InputDecoration(
+            labelText: 'Weight',
+            hintText: 'Enter your weight',
+            border: OutlineInputBorder(),
+          ),
+          validator: (value) {
+            // Add validation logic
+          },
+          onSaved: (newValue) => _weight = newValue!,
+        ),
         const SizedBox(height: 20.0),
         TextFormField(
-          controller: controller,
+          controller: bloodGrpController,
           decoration: const InputDecoration(
             labelText: 'Blood Group',
             hintText: 'Enter your Blood Group',
@@ -152,7 +158,7 @@ class _UserKycState extends State<UserKyc> {
           validator: (value) {
             // Add validation logic
           },
-          onSaved: (newValue) => _height = newValue!,
+          onSaved: (newValue) => _bloodgrp = newValue!,
         ),
       ],
     );
@@ -213,7 +219,6 @@ class _UserKycState extends State<UserKyc> {
       // If the user is not signed in, return a default value or handle accordingly
       return '';
     }
-    ;
   }
 
   void main() {

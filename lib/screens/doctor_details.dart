@@ -64,7 +64,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                       fontSize: 20,
                     ),
                   ),
-                  Text("Specifications: " + widget.docData[6],
+                  Text("Specializations: " + widget.docData[6],
                       style: const TextStyle(
                         fontFamily: "abz",
                         fontSize: 20,
@@ -125,13 +125,14 @@ class _DoctorDetailsState extends State<DoctorDetails> {
   Future<void> handleAppointmentRequests() async {
     final sharePref = await SharedPreferences.getInstance();
     Map<String, dynamic> apptmt = {
+      "docMail": widget.docData[3],
       "patId": sharePref.get('UserId'),
       "docName": widget.docData[0],
       "slot": "9.00-11.00",
       "status": false,
     };
 
-    await doctorRef.doc(widget.docData[3]).set(apptmt).whenComplete(() {
+    await doctorRef.add(apptmt).whenComplete(() {
       print("appointment set");
     });
   }
