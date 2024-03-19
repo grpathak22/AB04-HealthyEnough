@@ -205,7 +205,7 @@ class _DoctorKYCState extends State<DoctorKYC> {
     // Add user to 'users' collection
     CollectionReference usersRef =
         FirebaseFirestore.instance.collection("users");
-    await usersRef.doc(userId).set({"type": "doctor"});
+    await usersRef.doc(userId).set({"type": "doctors"});
 
     // Add user details to 'patients' collection
     CollectionReference patientsRef =

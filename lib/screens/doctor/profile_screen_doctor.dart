@@ -17,8 +17,8 @@ class ProfilePageDoc extends StatefulWidget {
 
 class _ProfilePageDocState extends State<ProfilePageDoc> {
   late String name = "loading";
-  late String? email = "loading";
-  late String phoneNumber = "0";
+  late String email = "loading";
+  late String phoneNumber = "loading";
   late String qualifications = "loading";
   late String specialization = "loading";
   ImageProvider profileImage =

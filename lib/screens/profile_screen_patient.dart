@@ -13,10 +13,10 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late String name = "John Doe"; // Default name
-  late String age = '20'; // Default email
-  late String address = "South Street, North Carolina"; // Default address
-  String bloodType = "O+"; // Default blood type
+  late String name = "Loading"; // Default name
+  late String age = 'Loading'; // Default email
+  late String address = "Loading"; // Default address
+  String bloodType = "Loading"; // Default blood type
   ImageProvider profileImage =
       const AssetImage('assets/images/patIcon.png'); // Default profile image
   @override

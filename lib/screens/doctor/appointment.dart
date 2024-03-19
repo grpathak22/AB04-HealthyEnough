@@ -1,43 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_enough/api/apis.dart';
 import 'package:healthy_enough/screens/doctor/record.dart';
+import 'package:healthy_enough/widgets/appoinment_patient.dart';
+import 'package:healthy_enough/widgets/appointment_doctor.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class PatientAppointment {
-  final int id;
-  final String slot;
-  final bool status;
-
-  PatientAppointment({
-    required this.id,
-    required this.slot,
-    required this.status,
-  });
-
-  // static Future<Stream<QuerySnapshot<Object?>>> getAppointmentsForUser() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final userID = 1;
-  //   // Ensure userID is not null
-  //   if (userID != null) {
-  //     return FirebaseFirestore.instance
-  //         .collection('appointments')
-  //         .where('docid', isEqualTo: userID)
-  //         .snapshots();
-  //   } else {
-  //     throw Exception('User ID not found in SharedPreferences');
-  //   }
-  // }
-
-  static PatientAppointment fromSnapshot(DocumentSnapshot<Object?> snapshot) {
-    final data = snapshot.data() as Map<String, dynamic>;
-    return PatientAppointment(
-      id: data['id'] as int,
-      slot: data['slot'] as String,
-      status: data['age'] as bool,
-    );
-  }
-}
 
 class DoctorAppointmentsPage extends StatefulWidget {
   @override
@@ -47,8 +15,48 @@ class DoctorAppointmentsPage extends StatefulWidget {
 class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
   bool _showSidebar = false;
   bool _showCalendar = false;
+  final String userId = APIs.auth.currentUser!.uid;
+  late String docMail = "";
+  late DocumentSnapshot<Map<String, dynamic>> patDetails;
   CollectionReference aptData =
       FirebaseFirestore.instance.collection("appointments");
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPatientDetails("1");
+    fetchDoctorMail();
+  }
+
+  Future<void> fetchDoctorMail() async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> docsnapshot =
+          await FirebaseFirestore.instance
+              .collection('doctors')
+              .doc(userId)
+              .get();
+      setState(() {
+        docMail = docsnapshot['Email'];
+      });
+    } catch (e) {
+      print('Error fetching doctor profile: $e');
+    }
+  }
+
+  Future<void> fetchPatientDetails(String patId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> patsnapshot =
+          await FirebaseFirestore.instance
+              .collection('patients')
+              .doc(patId)
+              .get();
+      setState(() {
+        patDetails = patsnapshot;
+      });
+    } catch (e) {
+      print('Error fetching doctor profile: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,13 +80,27 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
 
   Widget _buildListOfAppointments() {
     return FutureBuilder(
-      future: aptData.where("docid", isEqualTo: 1).get(),
+      future: aptData.get(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
             itemCount: snapshot.data?.size,
             itemBuilder: (context, i) {
-              return Text(snapshot.data!.docs[i]['patId'].toString());
+              if (snapshot.data!.docs[i]['docMail'] == docMail) {
+                fetchPatientDetails(snapshot.data!.docs[i]['patId']);
+                if (patDetails.data() != null) {
+                  return AppointmentCardDoctor(
+                    patid: snapshot.data!.docs[i]['patId'],
+                    uname: patDetails['Name'],
+                    age: patDetails['Age'],
+                    height: patDetails['Height'],
+                    weight: patDetails['Weight'],
+                    blood: patDetails['BloodGroup'],
+                    slot: snapshot.data!.docs[i]['slot'].toString(),
+                  );
+                }
+              }
+              return Text("");
             },
           );
         }
@@ -94,57 +116,6 @@ class _DoctorAppointmentsPageState extends State<DoctorAppointmentsPage> {
     );
   }
 }
-
-Widget _buildAppointmentsList(appointments) {
-  return ListView.builder(
-    itemCount: appointments.length,
-    itemBuilder: (context, index) {
-      final appointment = appointments[index];
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          color: Colors.teal,
-          // Subtle shadow
-        ),
-        child: Row(
-          children: [
-            // Patient info and appointment details
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.blue.shade200,
-                      child: Text(
-                        appointment.name[0].toUpperCase(),
-                        style: const TextStyle(
-                            color: Colors.white, fontSize: 16.0),
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      appointment.name,
-                      style: const TextStyle(
-                          fontSize: 16.0, fontWeight: FontWeight.bold),
-                    ),
-                    Text('Age: ${appointment.age}'),
-                    Text(
-                      '${DateFormat('MMMM d, yyyy').format(appointment.date)} - ${appointment.time.format(context)}',
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
-
   // void handlePatientInformation(PatientAppointment appointment) {
   //   Navigator.of(context).push(MaterialPageRoute(
   //       builder: (context) => MedicalRecordPage(patientId: appointment.id)));

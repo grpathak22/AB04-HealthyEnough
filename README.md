@@ -12,7 +12,11 @@ Secure Data Storage: Your medical records are in safe hands. We leverage Firebas
 
 Comprehensive Record Management: Effortlessly add, edit, and organize your medical history details, including diagnoses, treatments, medications, and allergies. Conveniently upload medical reports, prescriptions, and other relevant documents for centralized access.
 
+### USP of HealthyEnough :
+
 AI-Powered Insights: Integrated with the Google's Gemini API to provide doctor consultations with additional AI analysis of your medical records. This can enable doctors to gain deeper insights and potentially arrive at more informed decisions.
+
+
 ## Tech Stack
 
 **Client:** Flutter
@@ -22,7 +26,7 @@ AI-Powered Insights: Integrated with the Google's Gemini API to provide doctor c
 
 ## Demo
 
-Insert gif or link to demo
+(https://youtu.be/Ric592cTmwM)
 
 
 ## Run Locally

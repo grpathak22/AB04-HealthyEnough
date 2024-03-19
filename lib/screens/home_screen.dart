@@ -149,9 +149,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(width: 10.0), // Add some right padding
               ],
             ),
-
             const SizedBox(height: 20.0),
-
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                     ));
                   },
                   child: const HomeCard(
-                    text: "Doctor Appointments",
+                    text: "Your Appointments",
                     color: Colors.amber,
                   ),
                 ),
@@ -182,9 +180,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-
             const SizedBox(height: 20.0),
-
             const Text(
               'Top 10 Doctors:',
               style: TextStyle(
@@ -197,12 +193,11 @@ class _HomePageState extends State<HomePage> {
               child: _getDoctorNames(),
             ),
             const SizedBox(height: 20.0),
-
             Container(
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
-                color: Colors.amber.withOpacity(0.2), // Light teal background
+                color: Colors.amber.withOpacity(0.2),
               ),
               child: const Row(
                 children: [
@@ -217,9 +212,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-
-            const SizedBox(
-                height: 20.0), // Add spacing for bottom navigation bar
+            const SizedBox(height: 20.0),
           ],
         ),
       ),
