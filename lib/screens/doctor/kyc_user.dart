@@ -17,10 +17,23 @@ class UserKyc extends StatefulWidget {
 
 class _UserKycState extends State<UserKyc> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController controller = TextEditingController();
+
+  // Separate controllers for each text field
+  final nameController = TextEditingController();
+  final addressController = TextEditingController();
+  final ageController = TextEditingController();
+  final heightController = TextEditingController();
+  final weightController = TextEditingController();
+  final bloodGrpController = TextEditingController();
 
   int currentPage = 1;
-  Map<String, dynamic> formData = {};
+  String _name = "";
+  String _age = "";
+  String _weight = "";
+  String _height = "";
+  String _bloodgrp = "";
+  String _address = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +78,7 @@ class _UserKycState extends State<UserKyc> {
     return Column(
       children: [
         TextFormField(
-          controller: controller,
+          controller: nameController,
           decoration: const InputDecoration(
             labelText: 'Name',
             hintText: 'Enter your name',
@@ -74,11 +87,11 @@ class _UserKycState extends State<UserKyc> {
           validator: (value) {
             // Add validation logic
           },
-          onSaved: (newValue) => formData['name'] = newValue!,
+          onSaved: (newValue) => _name = newValue!,
         ),
         const SizedBox(height: 20.0),
         TextFormField(
-          controller: controller,
+          controller: addressController,
           decoration: const InputDecoration(
             labelText: 'Address',
             hintText: 'Enter your address',
@@ -87,11 +100,11 @@ class _UserKycState extends State<UserKyc> {
           validator: (value) {
             // Add validation logic
           },
-          onSaved: (newValue) => formData['address'] = newValue!,
+          onSaved: (newValue) => _address = newValue!,
         ),
         const SizedBox(height: 20.0),
         TextFormField(
-          controller: controller,
+          controller: ageController,
           decoration: const InputDecoration(
             labelText: 'Age',
             hintText: 'Enter your Age',
@@ -100,7 +113,7 @@ class _UserKycState extends State<UserKyc> {
           validator: (value) {
             // Add validation logic
           },
-          onSaved: (newValue) => formData['age'] = newValue!,
+          onSaved: (newValue) => _age = newValue!,
         ),
       ],
     );
@@ -110,7 +123,7 @@ class _UserKycState extends State<UserKyc> {
     return Column(
       children: [
         TextFormField(
-          controller: controller,
+          controller: heightController,
           decoration: const InputDecoration(
             labelText: 'Height',
             hintText: 'Enter your Height',
@@ -119,25 +132,24 @@ class _UserKycState extends State<UserKyc> {
           validator: (value) {
             // Add validation logic
           },
-          onSaved: (newValue) => formData['height'] = newValue!,
+          onSaved: (newValue) => _height = newValue!,
         ),
         const SizedBox(height: 20.0),
         TextFormField(
-            controller: controller,
-            decoration: const InputDecoration(
-              labelText: 'Weight',
-              hintText: 'Enter your weight',
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
-              return null;
-              // Add validation logic
-            },
-            onSaved: (newValue) => formData['weight'] = newValue),
-            onSaved: (newValue) => _weight),
+          controller: weightController,
+          decoration: const InputDecoration(
+            labelText: 'Weight',
+            hintText: 'Enter your weight',
+            border: OutlineInputBorder(),
+          ),
+          validator: (value) {
+            // Add validation logic
+          },
+          onSaved: (newValue) => _weight = newValue!,
+        ),
         const SizedBox(height: 20.0),
         TextFormField(
-          controller: controller,
+          controller: bloodGrpController,
           decoration: const InputDecoration(
             labelText: 'Blood Group',
             hintText: 'Enter your Blood Group',
@@ -146,7 +158,7 @@ class _UserKycState extends State<UserKyc> {
           validator: (value) {
             // Add validation logic
           },
-          onSaved: (newValue) => formData['bloodGroup'] = newValue!,
+          onSaved: (newValue) => _bloodgrp = newValue!,
         ),
       ],
     );
@@ -164,7 +176,6 @@ class _UserKycState extends State<UserKyc> {
           _formKey.currentState!.save();
           setState(() {
             currentPage++;
-            formData.clear(); // Clear the form data
           });
         }
       },
@@ -185,12 +196,12 @@ class _UserKycState extends State<UserKyc> {
     CollectionReference patientsRef =
         FirebaseFirestore.instance.collection("patients");
     await patientsRef.doc(userId).set({
-      "Name": formData['name'],
-      "Age": formData['age'],
-      "Weight": formData['weight'],
-      "Height": formData['height'],
-      "Address": formData['address'],
-      "BloodGroup": formData['bloodGroup'],
+      "Name": _name,
+      "Age": _age,
+      "Weight": _weight,
+      "Height": _height,
+      "Address": _address,
+      "BloodGroup": _bloodgrp,
     });
 
     Navigator.pushReplacement(
@@ -208,5 +219,12 @@ class _UserKycState extends State<UserKyc> {
       // If the user is not signed in, return a default value or handle accordingly
       return '';
     }
+  }
+
+  void main() {
+    runApp(const MaterialApp(
+      title: 'Registration Page',
+      home: UserKyc(),
+    ));
   }
 }

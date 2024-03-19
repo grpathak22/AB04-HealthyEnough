@@ -19,6 +19,14 @@ class DoctorKYC extends StatefulWidget {
 class _DoctorKYCState extends State<DoctorKYC> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  // Separate controllers for each text field
+  final nameController = TextEditingController();
+  final addressController = TextEditingController();
+  final ageController = TextEditingController();
+  final heightController = TextEditingController();
+  final weightController = TextEditingController();
+  final bloodGrpController = TextEditingController();
+
   int currentPage = 1;
   String _name = "";
   String _address = "";
@@ -43,7 +51,7 @@ class _DoctorKYCState extends State<DoctorKYC> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 LinearProgressIndicator(
-                  value: currentPage / 3,
+                  value: currentPage / 2,
                 ),
                 const SizedBox(height: 20.0),
                 buildPageContent(currentPage),
@@ -74,45 +82,42 @@ class _DoctorKYCState extends State<DoctorKYC> {
     return Column(
       children: [
         TextFormField(
+          controller: nameController,
           decoration: const InputDecoration(
             labelText: 'Name',
             hintText: 'Enter your name',
             border: OutlineInputBorder(),
           ),
+          validator: (value) {
+            // Add validation logic
+          },
           onSaved: (newValue) => _name = newValue!,
         ),
         const SizedBox(height: 20.0),
         TextFormField(
+          controller: addressController,
           decoration: const InputDecoration(
             labelText: 'Address',
             hintText: 'Enter your address',
             border: OutlineInputBorder(),
           ),
+          validator: (value) {
+            // Add validation logic
+          },
           onSaved: (newValue) => _address = newValue!,
         ),
         const SizedBox(height: 20.0),
         TextFormField(
+          controller: ageController,
           decoration: const InputDecoration(
-            labelText: 'Mobile Number',
-            hintText: 'Enter your mobile number',
+            labelText: 'Mobile',
+            hintText: 'Enter your Mobile',
             border: OutlineInputBorder(),
           ),
           validator: (value) {
             // Add validation logic
           },
           onSaved: (newValue) => _phoneNumber = newValue!,
-        ),
-        const SizedBox(height: 20.0),
-        TextFormField(
-          decoration: const InputDecoration(
-            labelText: 'Email ID',
-            hintText: 'Enter your email',
-            border: OutlineInputBorder(),
-          ),
-          validator: (value) {
-            // Add validation logic (e.g., check for valid email format)
-          },
-          onSaved: (newValue) => _email = newValue!,
         ),
       ],
     );
@@ -122,9 +127,10 @@ class _DoctorKYCState extends State<DoctorKYC> {
     return Column(
       children: [
         TextFormField(
+          controller: heightController,
           decoration: const InputDecoration(
-            labelText: 'Qualifications',
-            hintText: 'Enter your qualifications',
+            labelText: 'Qualification',
+            hintText: 'Enter your Qualification',
             border: OutlineInputBorder(),
           ),
           validator: (value) {
@@ -134,9 +140,10 @@ class _DoctorKYCState extends State<DoctorKYC> {
         ),
         const SizedBox(height: 20.0),
         TextFormField(
+          controller: weightController,
           decoration: const InputDecoration(
             labelText: 'Specialization',
-            hintText: 'Enter your specialization',
+            hintText: 'Enter your Specialization',
             border: OutlineInputBorder(),
           ),
           validator: (value) {
@@ -192,15 +199,18 @@ class _DoctorKYCState extends State<DoctorKYC> {
   }
 
   void _register(BuildContext context) async {
+    // Generate a random user ID
     String userId = generateUserId();
 
+    // Add user to 'users' collection
     CollectionReference usersRef =
         FirebaseFirestore.instance.collection("users");
     await usersRef.doc(userId).set({"type": "doctor"});
 
-    CollectionReference doctorsRef =
+    // Add user details to 'patients' collection
+    CollectionReference patientsRef =
         FirebaseFirestore.instance.collection("doctors");
-    await doctorsRef.doc(userId).set({
+    await patientsRef.doc(userId).set({
       "Name": _name,
       "Address": _address,
       "PhoneNumber": _phoneNumber,
@@ -218,21 +228,19 @@ class _DoctorKYCState extends State<DoctorKYC> {
 
   String generateUserId() {
     if (APIs.auth.currentUser != null) {
-    // Get the current user's Google ID (UID)
-    String googleId = APIs.auth.currentUser!.uid;
-    return googleId;
-  } else {
-    // If the user is not signed in, return a default value or handle accordingly
-    return '';
-  };
-  }
+      // Get the current user's Google ID (UID)
+      String googleId = APIs.auth.currentUser!.uid;
+      return googleId;
+    } else {
+      // If the user is not signed in, return a default value or handle accordingly
+      return '';
+    }
   }
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MaterialApp(
-    title: 'Registration Page',
-    home: DoctorKYC(),
-  ));
+  void main() {
+    runApp(const MaterialApp(
+      title: 'Registration Page',
+      home: DoctorKYC(),
+    ));
+  }
 }

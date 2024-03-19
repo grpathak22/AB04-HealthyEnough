@@ -16,11 +16,11 @@ class ProfilePageDoc extends StatefulWidget {
 }
 
 class _ProfilePageDocState extends State<ProfilePageDoc> {
-  late String name = "";
-  late String email = "";
-  late int phoneNumber = 0;
-  late String qualifications = "";
-  late String specialization = "";
+  late String name = "loading";
+  late String? email = "loading";
+  late String phoneNumber = "0";
+  late String qualifications = "loading";
+  late String specialization = "loading";
   ImageProvider profileImage =
       const AssetImage('assets/images/docIcon.png'); // Placeholder image
 
@@ -30,12 +30,14 @@ class _ProfilePageDocState extends State<ProfilePageDoc> {
     // Fetch doctor's profile data from Firestore
     fetchDoctorProfile();
   }
-   Future<void> _logout() async {
+
+  Future<void> _logout() async {
     await APIs.auth.signOut();
     await GoogleSignIn().signOut();
     await Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
+
   Future<void> fetchDoctorProfile() async {
     try {
       // Retrieve the current user's ID
@@ -49,7 +51,7 @@ class _ProfilePageDocState extends State<ProfilePageDoc> {
       // Extract data from the snapshot
       setState(() {
         name = snapshot['Name'];
-        email = snapshot['Email'];
+        email = APIs.auth.currentUser?.email;
         phoneNumber = snapshot['PhoneNumber'];
         qualifications = snapshot['Qualifications'];
         specialization = snapshot['Specialization'];
@@ -121,7 +123,7 @@ class _ProfilePageDocState extends State<ProfilePageDoc> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        email,
+                        email!,
                         style:
                             TextStyle(fontSize: 16.0, color: Colors.grey[600]),
                       ),
