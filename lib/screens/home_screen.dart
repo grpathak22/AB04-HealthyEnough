@@ -8,8 +8,10 @@ import 'package:healthy_enough/screens/doctor/appointment.dart';
 import 'package:healthy_enough/screens/doctor/availibility.dart';
 import 'package:healthy_enough/screens/doctor_details.dart';
 import 'package:healthy_enough/screens/profile_screen_patient.dart';
+import 'package:healthy_enough/screens/symptoscan.dart';
 import 'package:healthy_enough/widgets/doc_card.dart';
 import 'package:healthy_enough/widgets/home_card.dart';
+import 'package:healthy_enough/screens/medicine_search.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -174,8 +176,18 @@ class _HomePageState extends State<HomePage> {
                       },
                     );
                   },
-                  child: const HomeCard(
-                    text: "Medicine Searcher",
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MedSearch()), // Navigate to MedSearch page
+                      );
+                    },
+                    child: const HomeCard(
+                      text: "Medicine Searcher",
+                    ),
                   ),
                 ),
               ],
@@ -192,14 +204,14 @@ class _HomePageState extends State<HomePage> {
               height: 100,
               child: _getDoctorNames(),
             ),
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 230.0),
             Container(
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
                 color: Colors.amber.withOpacity(0.2),
               ),
-              child: const Row(
+              child: Row(
                 children: [
                   Icon(Icons.lightbulb_outline, color: Colors.amber),
                   SizedBox(width: 10.0),
@@ -212,7 +224,14 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            const SizedBox(height: 20.0),
+                 const SizedBox(width:40.0,),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: ((context) => SymptoScan())));
+                    },
+                    child: HomeCard(text: "SymptoScan"),
+                  ),
+            
           ],
         ),
       ),
