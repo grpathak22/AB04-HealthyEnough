@@ -15,7 +15,7 @@ class _DashboardPageState extends State<DashboardPageDoc> {
   int _page = 0;
   final pages = [
     const HomePageDoc(),
-    CalendarPage(),
+    MedicineTrackerPage(),
     const RecordScanner(),
   ];
 

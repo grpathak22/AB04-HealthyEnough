@@ -1,93 +1,182 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-import 'package:table_calendar/table_calendar.dart';
-import 'package:timeline_tile/timeline_tile.dart';
+class Medicine {
+  final String name;
+  final String imageUrl;
+  final int dosage; // Now stores the number of pills
+  final int dosageCount; // New field to store selected dropdown value
+  final TimeOfDay timeOfDay;
+  bool taken = false;
 
-class CalendarPage extends StatefulWidget {
-  @override
-  _CalendarPageState createState() => _CalendarPageState();
+  Medicine({
+    required this.name,
+    required this.imageUrl,
+    required this.dosage,
+    required this.dosageCount, // New field
+    required this.timeOfDay,
+  });
+
+  void markTaken() {
+    taken = true;
+  }
 }
 
-class _CalendarPageState extends State<CalendarPage> {
-  DateTime _selectedDay = DateTime.now();
-  List<Appointment> _appointments = [];
+class MedicineTrackerPage extends StatefulWidget {
+  @override
+  _MedicineTrackerPageState createState() => _MedicineTrackerPageState();
+}
+
+class _MedicineTrackerPageState extends State<MedicineTrackerPage> {
+  List<Medicine> medications = [];
+  List<int> dosageOptions = [1, 2, 3, 4, 5]; // List of dosage options
+
+  void addMedication(String name, String imageUrl, int dosage, int dosageCount,
+      TimeOfDay timeOfDay) {
+    setState(() {
+      medications.add(Medicine(
+          name: name,
+          imageUrl: imageUrl,
+          dosage: dosage,
+          dosageCount: dosageCount,
+          timeOfDay: timeOfDay));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Appointment Calendar'),
+      appBar: AppBar(
+        title: Text('Medicine Tracker'),
+      ),
       body: Column(
         children: [
-          TableCalendar(
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _selectedDay = selectedDay;
-              });
-            },
-            focusedDay: _selectedDay,
-            firstDay: DateTime(DateTime.now().year - 1),
-            lastDay: DateTime(DateTime.now().year + 1),
-            eventLoader: _getSelectedDayAppointments,
+          ElevatedButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => AddMedicationDialog(
+                  onAdd: addMedication, dosageOptions: dosageOptions),
+            ),
+            child: Text('Add Medication'),
           ),
           Expanded(
-            child: _buildTimeline(_selectedDay),
+            child: ListView.builder(
+              itemCount: medications.length,
+              itemBuilder: (context, index) {
+                final medication = medications[index];
+                return MedicationCard(medication: medication);
+              },
+            ),
           ),
         ],
       ),
     );
   }
+}
 
-  List<dynamic> _getSelectedDayAppointments(DateTime _selectDay) {
-    return _appointments
-        .where((appointment) => appointment.date.day == _selectedDay.day)
-        .map((appointment) => appointment.date)
-        .toList();
-  }
+class MedicationCard extends StatelessWidget {
+  final Medicine medication;
 
-  Widget _buildTimeline(DateTime day) {
-    final appointments = _appointments
-        .where((appointment) => appointment.date.day == day.day)
-        .toList();
-    return ListView.builder(
-      itemCount: appointments.length,
-      itemBuilder: (context, index) {
-        return TimelineTile(
-          axis: TimelineAxis.vertical,
-          alignment: TimelineAlign.start,
-          startChild: Container(),
-          endChild: Text(appointments[index].summary),
-          // indicator: DotIndicator(
-          //   color: Colors.blue,
-          // ),
-          isFirst: index == 0,
-          isLast: index == appointments.length - 1,
-        );
-      },
+  const MedicationCard({required this.medication});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        leading: medication.imageUrl.isEmpty
+            ? Icon(Icons.medication)
+            : Image.network(medication.imageUrl),
+        title: Text(medication.name),
+        subtitle: Text(
+          '${medication.dosageCount} pill(s) at ${medication.timeOfDay.format(context)}',
+        ),
+        trailing: IconButton(
+          icon: Icon(medication.taken
+              ? Icons.check_circle
+              : Icons.check_circle_outline),
+          onPressed: () => medication.markTaken(),
+        ),
+      ),
     );
   }
 }
 
-class Appointment {
-  final DateTime date;
-  final String summary;
+class AddMedicationDialog extends StatefulWidget {
+  final Function(String name, String imageUrl, int dosage, int dosageCount,
+      TimeOfDay timeOfDay) onAdd;
+  final List<int> dosageOptions;
 
-  Appointment(this.date, this.summary);
-}
-
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
-
-  const CustomAppBar({Key? key, required this.title}) : super(key: key);
+  const AddMedicationDialog({required this.onAdd, required this.dosageOptions});
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  _AddMedicationDialogState createState() => _AddMedicationDialogState();
+}
+
+class _AddMedicationDialogState extends State<AddMedicationDialog> {
+  String name = '';
+  String imageUrl = '';
+  int dosage = 0; // Now stores user-entered dosage value
+  int dosageCount = 1; // Default selected dosage count
+  TimeOfDay timeOfDay = TimeOfDay.now();
+
+  void handleAdd() {
+    widget.onAdd(name, imageUrl, dosage, dosageCount, timeOfDay);
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: Text(title),
-      centerTitle: true,
-      automaticallyImplyLeading: false, // Remove the back button
+    return AlertDialog(
+      title: Text('Add Medication'),
+      content: Column(
+        children: [
+          TextField(
+            decoration: InputDecoration(
+                labelText: 'Name'), // Use InputDecoration for label
+            onChanged: (value) => setState(() => name = value),
+          ),
+          TextField(
+            decoration:
+                InputDecoration(labelText: 'Dosage'),
+            keyboardType: TextInputType.number,
+
+            onChanged: (value) {
+              try {
+                setState(() => dosage = int.parse(value));
+              } catch (error) {
+                print('Invalid dosage entered: $error');
+              }
+            },
+          ),
+          DropdownButtonFormField<int>(
+            value: dosageCount, // Initial selected value
+            items: widget.dosageOptions
+                .map((value) => DropdownMenuItem<int>(
+                      value: value,
+                      child: Text('$value pill(s)'),
+                    ))
+                .toList(),
+            onChanged: (value) => setState(() => dosageCount = value!),
+          ),
+          TextButton(
+            onPressed: () => showTimePicker(
+              context: context,
+              initialTime: timeOfDay,
+            ).then((value) => setState(() => timeOfDay = value as TimeOfDay)),
+            child: Text('Time of Day: ${timeOfDay.format(context)}'),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: handleAdd,
+          child: Text('Add'),
+        ),
+      ],
     );
   }
 }

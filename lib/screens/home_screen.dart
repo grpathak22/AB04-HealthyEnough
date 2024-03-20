@@ -7,6 +7,7 @@ import 'package:healthy_enough/artificial_intelligence/analyzer.dart';
 import 'package:healthy_enough/screens/doctor/appointment.dart';
 import 'package:healthy_enough/screens/doctor/availibility.dart';
 import 'package:healthy_enough/screens/doctor_details.dart';
+import 'package:healthy_enough/screens/medicine_search.dart';
 import 'package:healthy_enough/screens/profile_screen_patient.dart';
 import 'package:healthy_enough/widgets/doc_card.dart';
 import 'package:healthy_enough/widgets/home_card.dart';
@@ -174,8 +175,18 @@ class _HomePageState extends State<HomePage> {
                       },
                     );
                   },
-                  child: const HomeCard(
-                    text: "Medicine Searcher",
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MedSearch()), // Navigate to MedSearch page
+                      );
+                    },
+                    child: const HomeCard(
+                      text: "Medicine Searcher",
+                    ),
                   ),
                 ),
               ],
